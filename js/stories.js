@@ -5,7 +5,8 @@ var messages = {
 	"NoMoney" : ["Me: I can't afford this!"],
 	"BuyTurkeyFirst" : ["Me: I should buy a turkey first!"],
 	"EmptyOven" : ["Me: I'll start cooking once I get a turkey."],
-	"OpenDoor" :["Me: I should probably try opening the oven door to measure the turkey's temperature."]
+	"OpenDoor" :["Me: I should probably try opening the oven door to measure the turkey's temperature."],
+	"BrokenLight" :["Me: The oven light is broken. I should buy a replacement."]
 }
 
 //Terrible Results
@@ -175,7 +176,7 @@ var story = {
 "Brother: Thanks Grandpa, I'll definitely keep that in mind."],
 
 "Hanging Doorway Ornaments":[
-"Grandma: A real bother these days are the people that decorations in their doorways. They get in your face as you try to walk through.",
+"Grandma: A real bother these days are the people with decorations in their doorways. They get in your face as you try to walk through.",
 "Grandma: And what if there is an Earthquake!",
 "Grandpa: It isn't like we live on a fault line.",
 "Grandma: Just stop hanging your bears in the doorway.",
@@ -475,6 +476,13 @@ var story = {
 "Mom Butter Story":
 ["Mom: My favorite color is butter.",
 "Spouse: That's cool."],
+
+"Secret Debug Story":
+["Spouse: Hey [Player], do you think the universe is just one giant computer simulation?",
+"Spouse: Like, maybe there are secret cheat codes or something.",
+"Spouse: But how would we enter the cheat codes? Wildly flail our arms around in some way?",
+"Spouse: Or maybe we need to eat certain foods on specific days of the week!",
+"Spouse: Hah, that would be funny." ],
 
 "Cat Story":
 ["Cat: Meow Meow Meow Meow Meow",

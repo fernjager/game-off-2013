@@ -482,6 +482,10 @@ function OvenUI( stage, gameState ){
 				doorOpen.alpha = 0;
 			}
 		}
+		else
+		{
+			gameState.pubsub.publish("ShowDialog", {seq:"BrokenLight", autoAdvance:true});
+		}
 	}
 
 	this.startTurkeyModel = function(){
