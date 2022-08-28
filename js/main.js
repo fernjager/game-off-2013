@@ -338,9 +338,11 @@ function GameUI( canvasElem, gameState ){
 
 	this.stage = new createjs.Stage( canvasElem );
 	this.stage.enableMouseOver(25);
-	createjs.Touch.enable(this.stage,false,true);
-	this.stage.preventSelection = false;
+	//createjs.Touch.enable(this.stage);
+	//this.stage.preventSelection = false;
+
 	//https://lucentminds.com/archives/easeljs-touch-mouse-events.html
+	
 	this.activeScreenName = "EndingScreen";
 	this.activeScreenObj = {};
 
