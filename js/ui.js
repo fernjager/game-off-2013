@@ -512,7 +512,6 @@ function OvenUI( stage, gameState ){
     	"burnt": "The turkey looks burnt"
     };
 
-
 	// Look for a drag event
 	function handlePress(event) {
 		if( event.stageY > 300 && that.ovenDoor != OVEN_OPEN){
@@ -542,7 +541,6 @@ function OvenUI( stage, gameState ){
 		doorPeekLightOff.alpha = 0;
 		doorOpen.alpha = 0;
 		handleBar.y = 0;
-		handleBar.alpha = 0.01;
 	}
 
 	function ovenOpen() {
