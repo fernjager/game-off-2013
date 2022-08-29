@@ -434,6 +434,8 @@ function OvenUI( stage, gameState ){
 	var panFront = new createjs.Bitmap( "res/screens/KitchenScreen/PanFront.png" );
 	panFront.alpha = 0;
 
+	var finalButton;
+
 	this.changeTemperature = function( direction ){
 
 		if( gameState.turkeyBought ){
@@ -501,7 +503,7 @@ function OvenUI( stage, gameState ){
  	handleBar.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
  	handleBar.addEventListener( "pressup", handlePress );
 	//handleBar.addEventListener( "click", ovenPeek );
-	
+
     var evalSkin  = {
     	"raw": "The turkey looks no different from when I put it in",
     	"undercooked": "The skin looks pink",
@@ -541,6 +543,7 @@ function OvenUI( stage, gameState ){
 		doorPeekLightOff.alpha = 0;
 		doorOpen.alpha = 0;
 		handleBar.y = 0;
+		finalButton.alpha = 0
 	}
 
 	function ovenOpen() {
@@ -551,6 +554,7 @@ function OvenUI( stage, gameState ){
 		doorOpen.alpha = 1;
 		handleBar.graphics.clear();
 		handleBar.graphics.beginFill("#ffffff").drawRect(5, 450, 400, 60);
+		finalButton.alpha = 0.01;
 
 		if( gameState.turkeyBought ){
 			var state = gameState.ovenModel.getTurkeyState();
@@ -573,6 +577,7 @@ function OvenUI( stage, gameState ){
 			doorClosedLightOff.alpha = 0;
 			doorOpen.alpha = 0;
 			handleBar.y = 48;
+			finalButton.alpha = 0
 
 			if( gameState.turkeyBought ){
 				var state = gameState.ovenModel.getTurkeyState();
@@ -695,14 +700,16 @@ function OvenUI( stage, gameState ){
 
 			//finalize button
 			if( gameState.turkeyBought ){
-				stage.addChild( new Button( stage, gameState, 45, 250, 250, 150, null, null, function(){
+				finalButton = new Button( stage, gameState, 45, 250, 250, 150, null, null, function(){
 					if(!evalSkin[turkeyState["skin"]["cond"][2]]){
 						gameState.pubsub.publish("Death","");
 						return;
 					}
 					gameState.pubsub.publish("Play", "Error");
 					gameState.pubsub.publish("ShowFinalConfirm","");
-				} ) );
+				} ) 
+				finalButton.alpha=0;
+				stage.addChild(finalButton);
 			}
 
 			stage.addChild( doorPeekLightOn);
