@@ -545,12 +545,12 @@ function OvenUI( stage, gameState ){
 
 	function ovenOpen() {
 		that.ovenDoor = OVEN_OPEN;
+		gameState.pubsub.publish( "Play", "Oven_Door_Full_Open" );
 		doorPeekLightOn.alpha = doorClosedLightOn.alpha = 0;
 		doorPeekLightOff.alpha = doorClosedLightOff.alpha = 0;
 		doorOpen.alpha = 1;
 		handleBar.graphics.clear();
 		handleBar.graphics.beginFill("#ffffff").drawRect(5, 450, 400, 60);
-		handleBar.alpha = 0.01;
 
 		if( gameState.turkeyBought ){
 			var state = gameState.ovenModel.getTurkeyState();
@@ -561,9 +561,7 @@ function OvenUI( stage, gameState ){
 			gameState.ovenModel.setRawTemp( (gameState.ovenModel.getRawTemp() - 3 ) < 20 ? 20 : gameState.ovenModel.getRawTemp() - 3 );
 			gameState.ovenOpened++;
 		}
-
-		gameState.pubsub.publish( "Play", "Oven_Door_Full_Open" );
-		}
+	}
 
 	function ovenPeek(){
 			that.ovenDoor = OVEN_PEEK;
