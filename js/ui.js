@@ -543,7 +543,10 @@ function OvenUI( stage, gameState ){
 		doorPeekLightOff.alpha = 0;
 		doorOpen.alpha = 0;
 		handleBar.y = 0;
-		finalButton.alpha = 0
+
+		if( gameState.turkeyBought ){
+			finalButton.alpha = 0
+		}
 	}
 
 	function ovenOpen() {
@@ -554,9 +557,10 @@ function OvenUI( stage, gameState ){
 		doorOpen.alpha = 1;
 		handleBar.graphics.clear();
 		handleBar.graphics.beginFill("#ffffff").drawRect(5, 450, 400, 60);
-		finalButton.alpha = 0.01;
+
 
 		if( gameState.turkeyBought ){
+			finalButton.alpha = 0.01;
 			var state = gameState.ovenModel.getTurkeyState();
 			if(!evalSkin[turkeyState["skin"]["cond"][2]])
 				gameState.pubsub.publish("Death","");
@@ -577,9 +581,10 @@ function OvenUI( stage, gameState ){
 			doorClosedLightOff.alpha = 0;
 			doorOpen.alpha = 0;
 			handleBar.y = 48;
-			finalButton.alpha = 0
+
 
 			if( gameState.turkeyBought ){
+				finalButton.alpha = 0
 				var state = gameState.ovenModel.getTurkeyState();
 				if(!evalSkin[turkeyState["skin"]["cond"][2]])
 					gameState.pubsub.publish("Death","");
