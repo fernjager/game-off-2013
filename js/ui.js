@@ -378,7 +378,7 @@ function OvenUI( stage, gameState ){
 	var OVEN_CLOSED = 0;
 	var OVEN_PEEK = 1;
 	var OVEN_OPEN = 2;
-	var OVEN_TIMER = 0;
+	this.ovenDoorTimer = 0;
 
 	this.ovenDoor = OVEN_CLOSED;
 	var ovenLight = new createjs.Shape();
@@ -519,7 +519,7 @@ function OvenUI( stage, gameState ){
 		if( event.stageY > 300 && that.ovenDoor != OVEN_OPEN){
 			ovenOpen();
 			//Mouse Drag to open fully from peek or closed.
-		}else if (that.ovenDoor == OVEN_PEEK && (Date.now() - OVEN_TIMER <2000)) {
+		} else if (that.ovenDoor == OVEN_PEEK && (Date.now() - that.ovenDoorTimer < 2000)) {
 			//Peek to Open if double clicked within seconds. Meant for Mobile users who cannot drag
 			ovenOpen();
 		}else if( that.ovenDoor == OVEN_CLOSED && that.ovenDoor != OVEN_OPEN ){
@@ -573,7 +573,7 @@ function OvenUI( stage, gameState ){
 
 	function ovenPeek(){
 			that.ovenDoor = OVEN_PEEK;
-			OVEN_TIMER =Date.now();
+			that.ovenDoorTimer = Date.now();
 			gameState.pubsub.publish( "Play", "Oven_Door_Peek_Open" );
 			doorPeekLightOn.alpha = lightPressedImg.alpha;
 			doorPeekLightOff.alpha = !lightPressedImg.alpha;
