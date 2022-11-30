@@ -6,6 +6,8 @@ It is another Thanksgiving holiday, a time of retrospection and blessings.
 
 You have been invited to craft the centerpiece of the American thanksgiving dinner, the turkey. Woo your girlfriend / boyfriend and be judged by your future in-laws! Apply your culinary expertise to impress your family!
 
+### [☞ Play Now ](https://fernjager.github.io/game-off-2013/)
+
 ## Turkey Cooking Simulator Features:
 * Real-time cooking action!
 * Unparalleled turkey-based thermodynamics!
@@ -30,9 +32,6 @@ You have been invited to craft the centerpiece of the American thanksgiving dinn
 * [Robert J. Chen](http://fernjager.net) - Javascript Wizard
 * [Benjamin Kwok](mailto:tengen1112@gmail.com) - Unpaid Art Peasant
 * Sheen Kao -  Finite Elementalist Supreme
-
-## Backup Mirror
-* http://fernjager.net/game/index.html
 
 ## Licenses and Credit
 ![CC](http://i.creativecommons.org/l/by-nc/3.0/88x31.png) 
