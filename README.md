@@ -32,7 +32,7 @@ You have been invited to craft the centerpiece of the American thanksgiving dinn
 * Sheen Kao -  Finite Elementalist Supreme
 
 ## Backup Mirror
-* http://fernjager.net/game/index.html
+* https://fernjager.github.io/game-off-2013/
 
 ## Licenses and Credit
 ![CC](http://i.creativecommons.org/l/by-nc/3.0/88x31.png) 
