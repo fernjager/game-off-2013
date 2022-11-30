@@ -328,6 +328,7 @@ function GameState(){
 	}
 }
 
+
 function GameUI( canvasElem, gameState ){
 	var that = this;
 
@@ -337,7 +338,7 @@ function GameUI( canvasElem, gameState ){
 
 	this.stage = new createjs.Stage( canvasElem );
 	this.stage.enableMouseOver(25);
-
+	
 	this.activeScreenName = "EndingScreen";
 	this.activeScreenObj = {};
 
@@ -391,7 +392,7 @@ function GameUI( canvasElem, gameState ){
 			that.stage.removeChild(items[index]);
 		}
 	});
-
+		
 	return {
 		draw : function(){
 			if( gameState.screenState == SCREEN_OUT ){
@@ -416,6 +417,7 @@ function GameUI( canvasElem, gameState ){
 			that.stage.update();
 		}
 	}
+
 }
 
 function Record( type, dateTime, record ){

@@ -378,6 +378,7 @@ function OvenUI( stage, gameState ){
 	var OVEN_CLOSED = 0;
 	var OVEN_PEEK = 1;
 	var OVEN_OPEN = 2;
+	this.ovenDoorTimer = 0;
 
 	this.ovenDoor = OVEN_CLOSED;
 	var ovenLight = new createjs.Shape();
@@ -433,6 +434,8 @@ function OvenUI( stage, gameState ){
 	var panFront = new createjs.Bitmap( "res/screens/KitchenScreen/PanFront.png" );
 	panFront.alpha = 0;
 
+	var finalButton;
+
 	this.changeTemperature = function( direction ){
 
 		if( gameState.turkeyBought ){
@@ -482,6 +485,10 @@ function OvenUI( stage, gameState ){
 				doorOpen.alpha = 0;
 			}
 		}
+		else
+		{
+			gameState.pubsub.publish("ShowDialog", {seq:"BrokenLight", autoAdvance:true});
+		}
 	}
 
 	this.startTurkeyModel = function(){
@@ -495,6 +502,7 @@ function OvenUI( stage, gameState ){
  	handleBar.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
  	handleBar.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
  	handleBar.addEventListener( "pressup", handlePress );
+	//handleBar.addEventListener( "click", ovenPeek );
 
     var evalSkin  = {
     	"raw": "The turkey looks no different from when I put it in",
@@ -506,72 +514,85 @@ function OvenUI( stage, gameState ){
     	"burnt": "The turkey looks burnt"
     };
 
-
 	// Look for a drag event
 	function handlePress(event) {
-		if( event.stageY > 300 && that.ovenDoor != OVEN_OPEN ){
-			that.ovenDoor = OVEN_OPEN;
-			doorPeekLightOn.alpha = doorClosedLightOn.alpha = 0;
-			doorPeekLightOff.alpha = doorClosedLightOff.alpha = 0;
-			doorOpen.alpha = 1;
-			handleBar.graphics.clear();
-			handleBar.graphics.beginFill("#ffffff").drawRect(5, 450, 400, 60);
-			handleBar.alpha = 0.01;
-
-			if( gameState.turkeyBought ){
-				var state = gameState.ovenModel.getTurkeyState();
-				if(!evalSkin[turkeyState["skin"]["cond"][2]])
-					gameState.pubsub.publish("Death","");
-				gameState.pubsub.publish( "ShowDialog", {seq:"custom", autoAdvance:true, customText:evalSkin[turkeyState["skin"]["cond"][2]] + "." } );
-				gameState.pubsub.publish( "AddRecord", {type:"Open ", text:"The turkey looked " + turkeyState["skin"]["cond"][2]} );
-				gameState.ovenModel.setRawTemp( (gameState.ovenModel.getRawTemp() - 3 ) < 20 ? 20 : gameState.ovenModel.getRawTemp() - 3 );
-				gameState.ovenOpened++;
-			}
-
-			gameState.pubsub.publish( "Play", "Oven_Door_Full_Open" );
-		}else if (that.ovenDoor == OVEN_OPEN ){
-			that.ovenDoor = OVEN_PEEK;
-			gameState.pubsub.publish( "Play", "Oven_Door_Full_Close" );
-			handleBar.graphics.clear();
-		 	handleBar.graphics.beginFill("#ffffff").drawRect(20, 190, 300, 20);
- 			handleBar.alpha = 0.01;
+		if( event.stageY > 300 && that.ovenDoor != OVEN_OPEN){
+			ovenOpen();
+			//Mouse Drag to open fully from peek or closed.
+		} else if (that.ovenDoor == OVEN_PEEK && (Date.now() - that.ovenDoorTimer < 2000)) {
+			//Peek to Open if double clicked within seconds. Meant for Mobile users who cannot drag
+			ovenOpen();
+		}else if( that.ovenDoor == OVEN_CLOSED && that.ovenDoor != OVEN_OPEN ){
 			ovenPeek();
+		}else if (that.ovenDoor == OVEN_OPEN ){
+			ovenClose();
+			gameState.pubsub.publish( "Play", "Oven_Door_Full_Close" );
+		}else if (that.ovenDoor == OVEN_PEEK){
+			ovenClose();
+			gameState.pubsub.publish( "Play", "Oven_Door_Peek_Close" );
 		}
 	}
 
-	handleBar.addEventListener( "click", ovenPeek );
+	function ovenClose() {
+		that.ovenDoor = OVEN_CLOSED;
+		handleBar.graphics.clear();
+		handleBar.graphics.beginFill("#ffffff").drawRect(20, 190, 300, 20);
+		doorClosedLightOn.alpha = lightPressedImg.alpha;
+		doorClosedLightOff.alpha = !lightPressedImg.alpha;
+		doorPeekLightOn.alpha = 0;
+		doorPeekLightOff.alpha = 0;
+		doorOpen.alpha = 0;
+		handleBar.y = 0;
+
+		if( gameState.turkeyBought ){
+			finalButton.alpha = 0
+		}
+	}
+
+	function ovenOpen() {
+		that.ovenDoor = OVEN_OPEN;
+		gameState.pubsub.publish( "Play", "Oven_Door_Full_Open" );
+		doorPeekLightOn.alpha = doorClosedLightOn.alpha = 0;
+		doorPeekLightOff.alpha = doorClosedLightOff.alpha = 0;
+		doorOpen.alpha = 1;
+		handleBar.graphics.clear();
+		handleBar.graphics.beginFill("#ffffff").drawRect(5, 450, 400, 60);
+
+
+		if( gameState.turkeyBought ){
+			finalButton.alpha = 0.01;
+			var state = gameState.ovenModel.getTurkeyState();
+			if(!evalSkin[turkeyState["skin"]["cond"][2]])
+				gameState.pubsub.publish("Death","");
+			gameState.pubsub.publish( "ShowDialog", {seq:"custom", autoAdvance:true, customText:evalSkin[turkeyState["skin"]["cond"][2]] + "." } );
+			gameState.pubsub.publish( "AddRecord", {type:"Open ", text:"The turkey looked " + turkeyState["skin"]["cond"][2]} );
+			gameState.ovenModel.setRawTemp( (gameState.ovenModel.getRawTemp() - 3 ) < 20 ? 20 : gameState.ovenModel.getRawTemp() - 3 );
+			gameState.ovenOpened++;
+		}
+	}
 
 	function ovenPeek(){
-		if( that.ovenDoor == OVEN_CLOSED && that.ovenDoor != OVEN_OPEN ){
+			that.ovenDoor = OVEN_PEEK;
+			that.ovenDoorTimer = Date.now();
 			gameState.pubsub.publish( "Play", "Oven_Door_Peek_Open" );
 			doorPeekLightOn.alpha = lightPressedImg.alpha;
 			doorPeekLightOff.alpha = !lightPressedImg.alpha;
 			doorClosedLightOn.alpha = 0;
 			doorClosedLightOff.alpha = 0;
 			doorOpen.alpha = 0;
-			that.ovenDoor = OVEN_PEEK;
-
 			handleBar.y = 48;
+
+
 			if( gameState.turkeyBought ){
+				finalButton.alpha = 0
 				var state = gameState.ovenModel.getTurkeyState();
 				if(!evalSkin[turkeyState["skin"]["cond"][2]])
 					gameState.pubsub.publish("Death","");
 				gameState.pubsub.publish( "ShowDialog", {seq:"custom", autoAdvance:true, customText:evalSkin[turkeyState["skin"]["cond"][2]] } );
 				gameState.pubsub.publish( "AddRecord", {type:"Peek ", text:"The turkey looked " +turkeyState["skin"]["cond"][2]} );
 			}
-		}
-		else if (that.ovenDoor == OVEN_PEEK){
-			doorClosedLightOn.alpha = lightPressedImg.alpha;
-			doorClosedLightOff.alpha = !lightPressedImg.alpha;
-			doorPeekLightOn.alpha = 0;
-			doorPeekLightOff.alpha = 0;
-			that.ovenDoor = OVEN_CLOSED;
-			gameState.pubsub.publish( "Play", "Oven_Door_Peek_Close" );
-			doorOpen.alpha = 0;
-			handleBar.y = 0;
-		}
 	}
-
+	
 	// Show core temperature
 	this.showTempDialog = function(){
 		if( that.ovenDoor != OVEN_OPEN ){
@@ -684,14 +705,16 @@ function OvenUI( stage, gameState ){
 
 			//finalize button
 			if( gameState.turkeyBought ){
-				stage.addChild( new Button( stage, gameState, 45, 250, 250, 150, null, null, function(){
+				finalButton = new Button( stage, gameState, 45, 250, 250, 150, null, null, function(){
 					if(!evalSkin[turkeyState["skin"]["cond"][2]]){
 						gameState.pubsub.publish("Death","");
 						return;
 					}
 					gameState.pubsub.publish("Play", "Error");
 					gameState.pubsub.publish("ShowFinalConfirm","");
-				} ) );
+				} ) 
+				finalButton.alpha=0;
+				stage.addChild(finalButton);
 			}
 
 			stage.addChild( doorPeekLightOn);
