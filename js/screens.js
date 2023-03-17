@@ -119,7 +119,7 @@ function MainScreen( stage, gameState ){
 function DifficultyScreen( stage, gameState ){
 	var that = this;
 
-    this.background = new createjs.Bitmap( "res/screens/DifficultyScreen/Difficulty-Selection.png" );
+    this.background = new createjs.Bitmap( "res/screens/DifficultyScreen/Difficulty-SelectionRevised.png" );
     stage.addChild( this.background );
 
     var turkeyAnimations = { peck:[14,24,"peck"], ruffle:[0,13,"ruffle"], stare:[25,35,"stare"] };
@@ -148,7 +148,7 @@ function DifficultyScreen( stage, gameState ){
  	stage.addChild( this.grassLayer );
 
  	// Difficulty selection UI
- 	this.buttonsAndText = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonsandText.png" );
+ 	this.buttonsAndText = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonsandTextRevised.png" );
  	stage.addChild( this.buttonsAndText );
 
  	this.maleSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonMale.png" );
