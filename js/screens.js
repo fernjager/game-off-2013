@@ -165,6 +165,14 @@ function DifficultyScreen( stage, gameState ){
  	this.femalePartnerSelection.alpha = 0;
  	stage.addChild( this.femalePartnerSelection );
 
+	// Difficulty
+	this.casualMode = new createjs.Bitmap( "res/screens/DifficultyScreen/DifficultyCasual.png" );
+ 	stage.addChild( this.casualMode );
+
+ 	this.hardcoreMode = new createjs.Bitmap( "res/screens/DifficultyScreen/DifficultyHardcore.png" );
+ 	this.hardcoreMode.alpha = 0;
+ 	stage.addChild( this.hardcoreMode );
+
  	var nameInput = new createjs.Text( "", "48px Arial", "black" );
    		nameInput.x = 47;
 	 	nameInput.y = 85;
@@ -260,9 +268,13 @@ function DifficultyScreen( stage, gameState ){
 		if ( difficulty == "Casual") {
 			gameState.hard = false;
 			gameState.hardcoreModifier = 1;
+			that.casualMode.alpha = 1;
+			that.hardcoreMode.alpha = 0;
 		} else {
 			gameState.hard = true;
 			gameState.hardcoreModifier = 20;
+			that.casualMode.alpha = 0;
+			that.hardcoreMode.alpha = 1;
 		}
 	})
 
