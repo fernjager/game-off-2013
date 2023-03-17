@@ -254,28 +254,31 @@ function GameState(){
     this.screenState = 0;
     this.newScreen = "";
 
+	const topShelf = 75;
+	const middleShelf = 250;
+	const bottomShelf = 450;
+
 	this.marketItems = {
-		"Frills Box" : new MarketItem( this, "Frills Box", 133,92, 3.00, "res/items/FrillsBox.png", "res/items/FrillsBoxGlow.png", "res/screens/KitchenScreen/FrillsBoxKitchen.png", "res/screens/KitchenScreen/FrillsBoxKitchenGlow.png",
-		 "Some people dress up their dogs. Others dress up their house. Why not dress up your turkey?" ),
+		"Organic Turkey" : new MarketItem( this, "Organic Turkey", 30,topShelf, randomWeight[0]*1.2, "res/items/Turkey5.png", "res/items/Turkey5Glow.png",null,null, "All natural. No hormones. No antibiotics. Free Range. Lead Free", parseFloat(randomWeight[0]) ),
+	    "Free Range Turkey": new MarketItem( this, "Free Range Turkey", 170,topShelf, randomWeight[1]*1.00, "res/items/Turkey4.png", "res/items/Turkey4Glow.png",null,null, "Our turkeys have wide open spaces to roam and are fed with only the highest quality feed.", parseFloat(randomWeight[1]) ),
+	    "Sunny Farms Turkey" : new MarketItem( this, "Sunny Farms Turkey", 310,topShelf, randomWeight[2]*0.60, "res/items/Turkey3.png", "res/items/Turkey3Glow.png",null,null, "100% Turkey product from Sunny Farms Heavy Industries, Ltd.", parseFloat(randomWeight[2]) ),
+	    "Pastured Turkey": new MarketItem( this, "Pastured Turkey", 450,topShelf, randomWeight[3]*1.4, "res/items/Turkey2.png", "res/items/Turkey2Glow.png",null,null, "Grassy fields and natural ingredients allow our turkeys to have a better life, and taste great.", parseFloat(randomWeight[3]) ),
+		"General Turkey": new MarketItem( this, "General Turkey", 590,topShelf, randomWeight[4]*0.80, "res/items/Turkey1.png", "res/items/Turkey1Glow.png",null,null, "100% General Satisfaction Guaranteed", parseFloat(randomWeight[4]) ),
 
-
-	    "Temperature Probe" : new MarketItem( this, "Temperature Probe", 200, 57, 9.00, "res/items/TempProbe.png", "res/items/TempProbeGlow.png", "res/screens/KitchenScreen/TempProbeKitchen.png", "res/screens/KitchenScreen/TempProbeKitchenGlow.png", "Ensure your food is cooked with this handy thermometer. Now with easy to read LED display" ),
-	    "Oven Light in a Box" : new MarketItem( this, "Oven Light in a Box", 131,222, 15.00, "res/items/OvenLightBox.png", "res/items/OvenLightBoxGlow.png", null,null, "This will allow checking on your turkey without letting the heat out." ),
-
-	    "Alarm Clock" : new MarketItem( this, "Alarm Clock", 173,248, 6.00, "res/items/Alarm.png", "res/items/AlarmGlow.png", "res/screens/KitchenScreen/AlarmKitchen.png", "res/screens/KitchenScreen/AlarmKitchenGlow.png", "Have you ever wanted to control time? Now you can. Digital readout counts down until time of choice. Audible alarm" ),
-		"Cookbook" : new MarketItem( this, "Cookbook", 283,203, 3.00, "res/items/Cookbook1.png", "res/items/Cookbook1Glow.png","res/screens/KitchenScreen/CookbookKitchen.png",  "res/screens/KitchenScreen/CookbookKitchenGlow.png", "How do I cook turkey? Handy note space included for writing down temperature measurements" ),
-	    "Repurposed Stuffing" : new MarketItem( this, "Repurposed Stuffing",  510,197, 2.00, "res/items/StuffingRepurposed.png", "res/items/StuffingRepurposedGlow.png", "res/screens/KitchenScreen/StuffingRepurposedKitchen.png", "res/screens/KitchenScreen/StuffingRepurposedKitchenGlow.png","At least 80% original breadcrumb. Guaranteed to contain no avian products" ),
-	    "Exquisite Stuffing" : new MarketItem( this, "Exquisite Stuffing", 458,210, 3.00, "res/items/StuffingExquisite.png", "res/items/StuffingExquisiteGlow.png", "res/screens/KitchenScreen/StuffingExquisiteKitchen.png","res/screens/KitchenScreen/StuffingExquisiteKitchenGlow.png", "Colonial merchants once traveled the four reaches of the Earth to bring back the ingredients contained in this very box" ),
-
-	    "Special Stuffing" : new MarketItem( this, "Special Stuffing", 390,220, 6.00, "res/items/StuffingSpecial.png", "res/items/StuffingSpecialGlow.png",
+		"Frills Box" : new MarketItem( this, "Frills Box", 100,middleShelf, 3.00, "res/items/FrillsBox.png", "res/items/FrillsBoxGlow.png", "res/screens/KitchenScreen/FrillsBoxKitchen.png", "res/screens/KitchenScreen/FrillsBoxKitchenGlow.png",
+		"Some people dress up their dogs. Others dress up their house. Why not dress up your turkey?" ),
+		"Repurposed Stuffing" : new MarketItem( this, "Repurposed Stuffing",  260,middleShelf, 2.00, "res/items/StuffingRepurposed.png", "res/items/StuffingRepurposedGlow.png", "res/screens/KitchenScreen/StuffingRepurposedKitchen.png", "res/screens/KitchenScreen/StuffingRepurposedKitchenGlow.png","At least 80% original breadcrumb. Guaranteed to contain no avian products" ),
+	    "Exquisite Stuffing" : new MarketItem( this, "Exquisite Stuffing", 420,middleShelf, 3.00, "res/items/StuffingExquisite.png", "res/items/StuffingExquisiteGlow.png", "res/screens/KitchenScreen/StuffingExquisiteKitchen.png","res/screens/KitchenScreen/StuffingExquisiteKitchenGlow.png", "Colonial merchants once traveled the four reaches of the Earth to bring back the ingredients contained in this very box" ),
+	    "Special Stuffing" : new MarketItem( this, "Special Stuffing", 580,middleShelf, 6.00, "res/items/StuffingSpecial.png", "res/items/StuffingSpecialGlow.png",
 	    	"res/screens/KitchenScreen/StuffingSpecialKitchen.png","res/screens/KitchenScreen/StuffingSpecialKitchenGlow.png",
 	    	"Once rated as the most handsome man in the universe. Scott and his patented special stuffing will set you on the path to food heaven" ),
 
-	    "Organic Turkey" : new MarketItem( this, "Organic Turkey", 180,360, randomWeight[0]*1.2, "res/items/Turkey5.png", "res/items/Turkey5Glow.png",null,null, "All natural. No hormones. No antibiotics. Free Range. Lead Free", parseFloat(randomWeight[0]) ),
-	    "Free Range Turkey": new MarketItem( this, "Free Range Turkey", 540,320, randomWeight[1]*1.00, "res/items/Turkey4.png", "res/items/Turkey4Glow.png",null,null, "Our turkeys have wide open spaces to roam and are fed with only the highest quality feed.", parseFloat(randomWeight[1]) ),
-	    "Sunny Farms Turkey" : new MarketItem( this, "Sunny Farms Turkey", 265,415, randomWeight[2]*0.60, "res/items/Turkey3.png", "res/items/Turkey3Glow.png",null,null, "100% Turkey product from Sunny Farms Heavy Industries, Ltd.", parseFloat(randomWeight[2]) ),
-	    "Pastured Turkey": new MarketItem( this, "Pastured Turkey", 474,357, randomWeight[3]*1.4, "res/items/Turkey2.png", "res/items/Turkey2Glow.png",null,null, "Grassy fields and natural ingredients allow our turkeys to have a better life, and taste great.", parseFloat(randomWeight[3]) ),
-		"General Turkey": new MarketItem( this, "General Turkey", 378,426, randomWeight[4]*0.80, "res/items/Turkey1.png", "res/items/Turkey1Glow.png",null,null, "100% General Satisfaction Guaranteed", parseFloat(randomWeight[4]) )
+		
+		"Temperature Probe" : new MarketItem( this, "Temperature Probe", 130, bottomShelf, 9.00, "res/items/TempProbe.png", "res/items/TempProbeGlow.png", "res/screens/KitchenScreen/TempProbeKitchen.png", "res/screens/KitchenScreen/TempProbeKitchenGlow.png", "Ensure your food is cooked with this handy thermometer. Now with easy to read LED display" ),
+		"Oven Light in a Box" : new MarketItem( this, "Oven Light in a Box", 230,bottomShelf, 15.00, "res/items/OvenLightBox.png", "res/items/OvenLightBoxGlow.png", null,null, "This will allow checking on your turkey without letting the heat out." ),
+		"Alarm Clock" : new MarketItem( this, "Alarm Clock", 330,bottomShelf, 6.00, "res/items/Alarm.png", "res/items/AlarmGlow.png", "res/screens/KitchenScreen/AlarmKitchen.png", "res/screens/KitchenScreen/AlarmKitchenGlow.png", "Have you ever wanted to control time? Now you can. Digital readout counts down until time of choice. Audible alarm" ),
+		"Cookbook" : new MarketItem( this, "Cookbook", 430,bottomShelf, 3.00, "res/items/Cookbook1.png", "res/items/Cookbook1Glow.png","res/screens/KitchenScreen/CookbookKitchen.png",  "res/screens/KitchenScreen/CookbookKitchenGlow.png", "How do I cook turkey? Handy note space included for writing down temperature measurements" ),
+		
 	};
 
         // Important Model, dummy placeholder

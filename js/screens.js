@@ -292,37 +292,37 @@ function KitchenScreen( stage, gameState ){
 function MarketScreen( stage, gameState ){
 	var that = this;
 
-    this.background = new createjs.Bitmap( "res/screens/MarketScreen/MarketScreen.png" );
+    this.background = new createjs.Bitmap( "res/screens/MarketScreen/MarketScreenShelvesPrices.png" );
     var price = new createjs.Text( "", "16px Arial", "black" );
     	price.x = 120;
 	 	price.y = 560;
 
 	var wallet = new createjs.Text( "$" + parseFloat(gameState.wallet).toFixed(2), "20px Arial", "black" );
    		wallet.x = 725;
-	 	wallet.y = 550;
+	 	wallet.y = 565;
 
  	var walletTag = new createjs.Bitmap("res/items/Wallet.png");
 		walletTag.x = 670;
-		walletTag.y = 535;
+		walletTag.y = 550;
 
-	var clipboardImg = new createjs.Bitmap("res/items/Clipboard.png");
+	var clipboardImg = new createjs.Bitmap("res/items/ClipboardSmaller.png");
 		clipboardImg.x = 5;
-		clipboardImg.y = 315;
+		clipboardImg.y = 415;
 
-	var clipboardTitle = new createjs.Text( "Shopping List", "18px Arial", "black" );
+	var clipboardTitle = new createjs.Text( "Shopping List", "14px Arial", "black" );
    		clipboardTitle.x = 25;
-	 	clipboardTitle.y = 385;
-	 	clipboardTitle.lineWidth = 175;
+	 	clipboardTitle.y = 470;
+	 	clipboardTitle.lineWidth = 110;
 
-	var clipboardText = new createjs.Text( "Turkey", "16px Arial", "black" );
+	var clipboardText = new createjs.Text( "Turkey", "12px Arial", "black" );
    		clipboardText.x = 23;
-	 	clipboardText.y = 425;
-	 	clipboardText.lineWidth = 173;
+	 	clipboardText.y = 500;
+	 	clipboardText.lineWidth = 102;
 
-	var clipboardWeight = new createjs.Text( "", "16px Arial", "black" );
-   		clipboardWeight.x = 120;
-	 	clipboardWeight.y = 540;
-	 	clipboardWeight.lineWidth = 175;
+	var clipboardWeight = new createjs.Text( "", "12px Arial", "black" );
+   		clipboardWeight.x = 75;
+	 	clipboardWeight.y = 580;
+	 	clipboardWeight.lineWidth = 110;
 
 	// Play soundz
 	gameState.pubsub.publish( "Play", {name:"Entrance", volume:0.3} );
@@ -338,7 +338,7 @@ function MarketScreen( stage, gameState ){
     stage.addChild(clipboardTitle);
     stage.addChild(clipboardText);
     stage.addChild(clipboardWeight);
-    stage.addChild(price);
+    //stage.addChild(price);
 
     this.uiElems = [];
     this.uiElems.push( new ImgButton( stage, gameState, 690,0, "res/items/ExitSign.png", "res/items/ExitGlow.png","SwitchScreen", "KitchenScreen", "Click"  ) );
@@ -348,8 +348,8 @@ function MarketScreen( stage, gameState ){
     	gameState.marketItems[marketItemKeys[index]].draw( stage );
     }
 
-	this.topground = new createjs.Bitmap( "res/screens/MarketScreen/MarketTopShelf.png" );
-	stage.addChild( this.topground );
+	// this.topground = new createjs.Bitmap( "res/screens/MarketScreen/MarketTopShelf.png" );
+	// stage.addChild( this.topground );
 
 
 	this.showPrice = function( cost ){
