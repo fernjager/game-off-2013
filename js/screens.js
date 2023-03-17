@@ -151,12 +151,19 @@ function DifficultyScreen( stage, gameState ){
  	this.buttonsAndText = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonsandTextRevised.png" );
  	stage.addChild( this.buttonsAndText );
 
- 	this.maleSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonMale.png" );
- 	stage.addChild( this.maleSelection );
+ 	this.malePlayerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPlayerMale.png" );
+ 	stage.addChild( this.malePlayerSelection );
 
- 	this.femaleSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonFemale.png" );
- 	this.femaleSelection.alpha = 0;
- 	stage.addChild( this.femaleSelection );
+ 	this.femalePlayerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPlayerFemale.png" );
+ 	this.femalePlayerSelection.alpha = 0;
+ 	stage.addChild( this.femalePlayerSelection );
+
+	this.malePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerMale.png" );
+ 	stage.addChild( this.malePartnerSelection );
+
+ 	this.femalePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerFemale.png" );
+ 	this.femalePartnerSelection.alpha = 0;
+ 	stage.addChild( this.femalePartnerSelection );
 
  	var nameInput = new createjs.Text( "", "48px Arial", "black" );
    		nameInput.x = 47;
@@ -204,27 +211,66 @@ function DifficultyScreen( stage, gameState ){
         event.preventDefault();
     }
 
- 	// Easy/Hard Button
- 	stage.addChild( new Button( stage, gameState, 500, 235, 100, 55, "ChangeGender", "Male" ) );
- 	stage.addChild( new Button( stage, gameState, 500, 300, 100, 55, "ChangeGender", "Female" ) );
+ 	// Player and partner gender
+ 	stage.addChild( new Button( stage, gameState, 530, 205, 50, 25, "ChangePlayerGender", "Male" ) );
+ 	stage.addChild( new Button( stage, gameState, 625, 205, 50, 25, "ChangePlayerGender", "Female" ) );
 
- 	stage.addChild( new Button( stage, gameState, 503, 370, 200, 55, null, null, function(){ document.onkeyup = function(){}; gameState.hard = false; gameState.gameStarted = true; gameState.hardcoreModifier=1; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
- 	stage.addChild( new Button( stage, gameState, 500, 495, 205, 55, null, null, function(){ document.onkeydown = function(){};  gameState.hard = true;  gameState.gameStarted = true; gameState.hardcoreModifier=20; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
+	stage.addChild( new Button( stage, gameState, 530, 290, 50, 25, "ChangePartnerGender", "Male" ) );
+ 	stage.addChild( new Button( stage, gameState, 625, 290, 50, 25, "ChangePartnerGender", "Female" ) );
 
+	// Easy/Hard Button
+ 	// stage.addChild( new Button( stage, gameState, 535, 335, 160, 40, null, null, function(){ document.onkeyup = function(){}; gameState.hard = false; gameState.gameStarted = true; gameState.hardcoreModifier=1; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
+ 	// stage.addChild( new Button( stage, gameState, 535, 435, 160, 40, null, null, function(){ document.onkeydown = function(){};  gameState.hard = true;  gameState.gameStarted = true; gameState.hardcoreModifier=20; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
+
+	stage.addChild( new Button( stage, gameState, 535, 335, 160, 40, "SetDifficulty", "Casual" ) );
+ 	stage.addChild( new Button( stage, gameState, 535, 435, 160, 40, "SetDifficulty", "Hardcore" ) );
+
+	// back button
  	stage.addChild( new Button( stage, gameState, 35, 495, 85, 55, "SwitchScreen", "MainScreen" ) );
 
- 	gameState.pubsub.subscribe( "ChangeGender", function(gender){
- 		gameState.gender=gender;
+	// start button
+	stage.addChild( new Button( stage, gameState, 535, 530, 200, 50, "StartGame", null ) );
+
+ 	gameState.pubsub.subscribe( "ChangePlayerGender", function(gender){
+ 		gameState.playerGender=gender;
  		if( gender == "Male" ){
- 			that.maleSelection.alpha = 1;
- 			that.femaleSelection.alpha = 0;
- 			gameState.pronoun = "he";
+ 			that.malePlayerSelection.alpha = 1;
+ 			that.femalePlayerSelection.alpha = 0;
+ 			gameState.playerPronoun = "he";
  		}else{
- 			that.maleSelection.alpha = 0;
- 			that.femaleSelection.alpha = 1;
- 			gameState.pronoun = "she";
+ 			that.malePlayerSelection.alpha = 0;
+ 			that.femalePlayerSelection.alpha = 1;
+ 			gameState.playerPronoun = "she";
  		}
  	})
+	 gameState.pubsub.subscribe( "ChangePartnerGender", function(gender){
+		gameState.partnerGender=gender;
+		if( gender == "Male" ){
+			that.malePartnerSelection.alpha = 1;
+			that.femalePartnerSelection.alpha = 0;
+			gameState.partnerPronoun = "he";
+		}else{
+			that.malePartnerSelection.alpha = 0;
+			that.femalePartnerSelection.alpha = 1;
+			gameState.partnerPronoun = "she";
+		}
+	})
+
+	gameState.pubsub.subscribe( "SetDifficulty", function(difficulty){
+		if ( difficulty == "Casual") {
+			gameState.hard = false;
+			gameState.hardcoreModifier = 1;
+		} else {
+			gameState.hard = true;
+			gameState.hardcoreModifier = 20;
+		}
+	})
+
+	gameState.pubsub.subscribe( "StartGame", function(){
+		gameState.gameStarted = true; 
+		gameState.pubsub.publish("SwitchScreen", "KitchenScreen");
+	})
+
 	return {
 		blit : function(){
 			if( createjs.Ticker.getTicks() %50 == 0 ){

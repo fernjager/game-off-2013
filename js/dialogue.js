@@ -74,14 +74,14 @@ function DialogUI( stage, gameState ){
  	this.showDialog= function( textSeq ){
  		if(DEBUG) console.log("showing"+ textSeq);
  		if( !peopleImg["Me"] ){
- 		   	 peopleImg["Me"] = peopleImg[gameState.gender];
+ 		   	 peopleImg["Me"] = peopleImg[gameState.playerGender];
  		}
 
 		if( !peopleImg["Spouse"] ){
-			if( gameState.gender == "Male" ){
-				peopleImg["Spouse"] = peopleImg["Girlfriend"] ;
-			}else{
+			if( gameState.partnerGender == "Male" ){
 				peopleImg["Spouse"] = peopleImg["Boyfriend"] ;
+			}else{
+				peopleImg["Spouse"] = peopleImg["Girlfriend"] ;
 			}
 		}
 
