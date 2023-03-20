@@ -187,7 +187,7 @@ function DifficultyScreen( stage, gameState ){
 	nameInput.lineWidth = 175;
 
 	stage.addChild( nameInput );
-
+	
 	// handle keyboard typing
     document.onkeyup = function(event){
     	// keycode
