@@ -174,9 +174,17 @@ function DifficultyScreen( stage, gameState ){
  	stage.addChild( this.hardcoreMode );
 
  	var nameInput = new createjs.Text( "", "48px Arial", "black" );
-   		nameInput.x = 47;
-	 	nameInput.y = 85;
-	 	nameInput.lineWidth = 175;
+
+	//Create cursor text object
+	var cursor = new createjs.Text( "|", "48px Arial", "black" );
+
+	//Append to nameInput text
+	nameInput.text += cursor.text;
+	
+   	
+	nameInput.x = 47;
+	nameInput.y = 85;
+	nameInput.lineWidth = 175;
 
 	stage.addChild( nameInput );
 
@@ -194,8 +202,11 @@ function DifficultyScreen( stage, gameState ){
             }
 
             if( keynum != 8 && keynum < 91 && keynum > 47 && nameInput.text.length < 22 ){
-            	nameInput.text += String.fromCharCode(keynum);
-            	gameState.name = nameInput.text;
+
+				let len = nameInput.text.length
+            	nameInput.text = nameInput.text.substring(0,len-1) + String.fromCharCode(keynum) + cursor.text;
+            	gameState.name = nameInput.text.substring(0,len);
+				
             }
     };
 
@@ -213,8 +224,11 @@ function DifficultyScreen( stage, gameState ){
             }
 
             if(keynum == 8 && nameInput.text.length > 0 ){
-            	nameInput.text = nameInput.text.substr(0, nameInput.text.length-1);
-            	gameState.name = nameInput.text;
+				len = nameInput.text.length
+            	nameInput.text = nameInput.text.substring(0, len-2);
+				nameInput.text += cursor.text
+            	gameState.name = nameInput.text.substring(0,len-2)
+
             }
         event.preventDefault();
     }
