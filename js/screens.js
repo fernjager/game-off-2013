@@ -344,13 +344,10 @@ function KitchenScreen( stage, gameState ){
  		gameState.storeVisits++;
 	} );
 
-	// If player did not buy a turkey:
+	// If player did not buy a turkey
 	if( !gameState.turkeyBought ){
 		// Display the tutorial
 		DisplayTutorial(stage, gameState, 1);
-
-		// Tell the user they haven't bought a turkey yet
-		// gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} );
 	}
 
 
@@ -456,6 +453,7 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 		stage.removeChild(tutorialText);
 		stage.removeChild(nextText);
 		if (tutorialDone) {
+			// Once the tutorial is done, bring up dialogue that tells the user to go buy a turkey
 			gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} ) 
 		} else {
 			DisplayTutorial(stage, gameState, tutorialNum+1) 
