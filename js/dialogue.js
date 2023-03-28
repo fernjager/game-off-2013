@@ -56,7 +56,7 @@ function DialogUI( stage, gameState ){
 	this.currentFace = peopleImg["Male"];
 	this.currentFace.x = 0;
 
-	this.textContent = new createjs.Text( "", "24px Arial", "black" );
+	this.textContent = new createjs.Text( "", "22px Arial", "black" );
 	this.textContent.x = 205;
 	this.textContent.y = 705;
 	this.textContent.lineWidth = 565;
@@ -65,10 +65,7 @@ function DialogUI( stage, gameState ){
 	
 	this.autoplayText = new createjs.Text( "Autoplay", "12px Arial", "gray" );
 	this.autoplayText.x = 220;
-	this.autoplayText.y = 705; //565
-	// this.autoplayText.lineWidth = 565;
-	// this.autoplayText.lineHeight = 30;
-	// this.autoplayText.textBaseline = "alphabetic";
+	this.autoplayText.y = 705;
 
 	this.dialogBox.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
  	this.dialogBox.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
@@ -131,7 +128,6 @@ function DialogUI( stage, gameState ){
 
  		that.currentFace.y = 250;
  		that.currentFace = peopleImg[nextDialogue[0]] || that.currentFace;
- 		// that.autoAdvance = textSeq.autoAdvance;
 		that.autoAdvance = gameState.autoplay;
  		that.dialogMotionQueue = [DIALOG_SHOWING];
  	}
