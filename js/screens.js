@@ -344,9 +344,13 @@ function KitchenScreen( stage, gameState ){
  		gameState.storeVisits++;
 	} );
 
-	// If player did not buy a turkey, tell them
+	// If player did not buy a turkey:
 	if( !gameState.turkeyBought ){
-		gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} );
+		// Display the tutorial
+		DisplayTutorial(stage, gameState, 1);
+
+		// Tell the user they haven't bought a turkey yet
+		// gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} );
 	}
 
 
@@ -359,6 +363,104 @@ function KitchenScreen( stage, gameState ){
 			}
 		}
 	}
+}
+
+function DisplayTutorial( stage, gameState, tutorialNum ){
+	var tutToDisplay;
+	var tutorialText;
+	var nextText;
+	var tutorialDone = false;
+	if (tutorialNum == 1) {
+		tutToDisplay = "res/screens/KitchenScreen/Tutorial1.png";
+		
+		tutorialText = new createjs.Text( "Click the help button anytime to see all available controls and options", "22px Arial", "black" );
+		tutorialText.x = 155;
+		tutorialText.y = 105;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Next >", "20px Arial", "black");
+		nextText.x = 455;
+		nextText.y = 220;
+
+	} else if (tutorialNum == 2) {
+		tutToDisplay = "res/screens/KitchenScreen/Tutorial2.png"
+
+		tutorialText = new createjs.Text( "Click the oven door to open it a crack, and click and drag the door to open it fully", "22px Arial", "black" );
+		tutorialText.x = 265;
+		tutorialText.y = 275;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Next >", "20px Arial", "black");
+		nextText.x = 575;
+		nextText.y = 390;
+
+	} else if (tutorialNum == 3) {
+		if (gameState.hard == true) {
+			tutToDisplay = "res/screens/KitchenScreen/TutorialFinal.png"
+			tutorialDone = true;
+
+			tutorialText = new createjs.Text( "Click on the brochure to go to the store. Your turkey awaits!", "22px Arial", "black" );
+			tutorialText.x = 275;
+			tutorialText.y = 275;
+			tutorialText.lineWidth = 325;
+			tutorialText.lineHeight = 30;
+
+			nextText = new createjs.Text("Finish", "20px Arial", "black");
+			nextText.x = 590;
+			nextText.y = 375;
+		} else {
+			tutToDisplay = "res/screens/KitchenScreen/Tutorial3Casual.png"
+
+			tutorialText = new createjs.Text( "Click the clock to skip ahead by 20 minutes", "22px Arial", "black" );
+			tutorialText.x = 345;
+			tutorialText.y = 90;
+			tutorialText.lineWidth = 325;
+			tutorialText.lineHeight = 30;
+
+			nextText = new createjs.Text("Next >", "20px Arial", "black");
+			nextText.x = 660;
+			nextText.y = 195;
+
+		}
+	} else if (tutorialNum == 4) {
+		tutToDisplay = "res/screens/KitchenScreen/TutorialFinal.png"
+		tutorialDone = true;
+
+		tutorialText = new createjs.Text( "Click on the brochure to go to the store. Your turkey awaits!", "22px Arial", "black" );
+		tutorialText.x = 275;
+		tutorialText.y = 275;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Finish", "20px Arial", "black");
+		nextText.x = 590;
+		nextText.y = 375;
+	}
+	
+	var tutorial = new createjs.Bitmap( tutToDisplay );
+
+	tutorial.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
+	tutorial.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
+	tutorial.addEventListener( "click", NextTutorial);
+
+
+    stage.addChild( tutorial );
+	stage.addChild( tutorialText );
+	stage.addChild( nextText );
+
+
+	function NextTutorial(){ 
+		stage.removeChild(tutorial);
+		stage.removeChild(tutorialText);
+		stage.removeChild(nextText);
+		if (tutorialDone) {
+			gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} ) 
+		} else {
+			DisplayTutorial(stage, gameState, tutorialNum+1) 
+		}
+	};
 }
 
 function MarketScreen( stage, gameState ){
