@@ -1072,6 +1072,66 @@ function ImgButton( stage, gameState, x, y, mouseOutImg, mouseOverImg, eventCmd,
 	}
 }
 
+function VolumeButton( stage, gameState, x, y, eventCmd, arg, sound, altfunc ){
+
+	var mouseOverMute = "/res/controls/volume-mute-large.png";
+	var mouseOutMute = "/res/controls/volume-mute.png";
+
+	var mouseOverVolume = "/res/controls/volume-large.png";
+	var mouseOutVolume = "/res/controls/volume.png";
+	
+	if (window.muted == false){
+		var mouseOver = new createjs.Bitmap(mouseOverVolume);
+		var mouseOut = new createjs.Bitmap(mouseOutVolume);
+	}
+	else{
+		var mouseOver = new createjs.Bitmap(mouseOverMute);
+		var mouseOut = new createjs.Bitmap(mouseOutMute);
+	}
+	mouseOver.x = mouseOut.x = x;
+	mouseOver.y = mouseOut.y = y;
+	 mouseOut.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; mouseOver.visible = true; mouseOut.visible = false;  } );
+	 mouseOut.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; mouseOver.visible = false; mouseOut.visible = true; } );
+	 mouseOver.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; mouseOver.visible = true; mouseOut.visible = false;  } );
+	 mouseOver.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; mouseOver.visible = false; mouseOut.visible = true; } );
+	 mouseOver.addEventListener( "click", function(){
+
+		if(window.muted == false){
+			mouseOver.image.src = mouseOverMute;
+			mouseOut.image.src = mouseOutMute;
+			window.muted = true;
+			
+		 }
+		 else{
+			mouseOver.image.src = mouseOverVolume;
+			mouseOut.image.src = mouseOutVolume;
+			window.muted = false
+		 }
+
+		 if( sound ){
+			 gameState.pubsub.publish("Play", sound );
+		 }
+		 if( !altfunc){
+			 gameState.pubsub.publish( eventCmd, arg );
+			 return;
+		 }
+		 
+		 altfunc();
+
+
+	 } );
+
+	 mouseOver.visible = false;
+	stage.addChild( mouseOut );
+	stage.addChild( mouseOver );
+
+return {
+	tick: function(){}
+}
+}
+
+
+
 function Button( stage, gameState, x_orig, y_orig, x_dest, y_dest, eventCmd, arg, altfunc ){
 	var that = this;
 	if(DEBUG) console.log("button clicked with "+ arg);

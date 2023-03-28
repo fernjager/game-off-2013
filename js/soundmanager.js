@@ -51,7 +51,19 @@ function SoundManager( gameState ){
 			channel.volume = soundName.volume;
 		}
 		channel.play();
+
 	};
+
+	this.muteToggle = function(){
+
+		if (window.muted == true){
+			createjs.Sound.muted = true;
+		}
+		else{
+			createjs.Sound.muted = false
+		}
+				
+	}
 
 	this.backgroundLoop = function( soundName ){
 		var newBackgroundSound;
@@ -77,6 +89,7 @@ function SoundManager( gameState ){
 
 	gameState.pubsub.subscribe( "Play", this.play );
 	gameState.pubsub.subscribe( "BackgroundLoop", this.backgroundLoop );
+	gameState.pubsub.subscribe("ToggleMute", this.muteToggle)
 	gameState.pubsub.subscribe( "FadeOut", this.fadeOut );
 
 	return {
