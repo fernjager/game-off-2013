@@ -18,6 +18,7 @@ function GameState(){
 	this.partnerGender = "Male";
     this.pronoun = "he";
 	this.partnerPronoun = "he";
+	this.autoplay = false;
 	this.wallet = 45.00;
 	this.hard = false;
 	this.boughtOvenLight = false;
@@ -65,17 +66,25 @@ function GameState(){
 
     //
     queue.loadFile( {id: "DialogueBoxFile", src:"res/screens/GUI/DialogueBox.png"} );
-    /*queue.loadFile( {id:"res/screens/LoadingScreen/Turkey0.png", src: "res/screens/LoadingScreen/Turkey0.png"} );
+	queue.loadFile( {id: "DialogueBoxFile", src:"res/screens/GUI/DialogueBoxAutoplayOff.png"} );
+    queue.loadFile( {id: "DialogueBoxFile", src:"res/screens/GUI/DialogueBoxAutoplayOn.png"} );
+
+	/*queue.loadFile( {id:"res/screens/LoadingScreen/Turkey0.png", src: "res/screens/LoadingScreen/Turkey0.png"} );
     queue.loadFile( {id:"res/screens/LoadingScreen/Turkey25.png", src: "res/screens/LoadingScreen/Turkey25.png"} );
     queue.loadFile( {id:"res/screens/LoadingScreen/Turkey50.png", src: "res/screens/LoadingScreen/Turkey50.png"} );
     queue.loadFile( {id:"res/screens/LoadingScreen/Turkey75.png", src: "res/screens/LoadingScreen/Turkey75.png"} );
     queue.loadFile( {id:"res/screens/LoadingScreen/TurkeyDone.png", src: "res/screens/LoadingScreen/TurkeyDone.png"} );*/
 
     // Screens
-    queue.loadFile( {id: "res/screens/DifficultyScreen/Difficulty-Selection.png", src:"res/screens/DifficultyScreen/Difficulty-Selection.png"} );
-    queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonsandText.png", src:"res/screens/DifficultyScreen/ButtonsandText.png"} );
-	queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonMale.png", src:"res/screens/DifficultyScreen/ButtonMale.png"} );
-    queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonFemale.png", src:"res/screens/DifficultyScreen/ButtonFemale.png"} );
+    queue.loadFile( {id: "res/screens/DifficultyScreen/Difficulty-SelectionRevised.png", src:"res/screens/DifficultyScreen/Difficulty-Selection.png"} );
+    queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonsandTextRevised.png", src:"res/screens/DifficultyScreen/ButtonsandText.png"} );
+	queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonPlayerMale.png", src:"res/screens/DifficultyScreen/ButtonMale.png"} );
+    queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonPlayerFemale.png", src:"res/screens/DifficultyScreen/ButtonFemale.png"} );
+	queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonPartnerMale.png", src:"res/screens/DifficultyScreen/ButtonMale.png"} );
+    queue.loadFile( {id: "res/screens/DifficultyScreen/ButtonPartnerFemale.png", src:"res/screens/DifficultyScreen/ButtonFemale.png"} );
+	queue.loadFile( {id: "res/screens/DifficultyScreen/DifficultyCasual.png", src:"res/screens/DifficultyScreen/ButtonMale.png"} );
+    queue.loadFile( {id: "res/screens/DifficultyScreen/DifficultyHardcore.png", src:"res/screens/DifficultyScreen/ButtonFemale.png"} );
+
 
     // Load image assets
     queue.loadFile( {id: "TurkeySpriteFile", src:"res/screens/MainScreen/TurkeySprite.png"} );
