@@ -6,7 +6,9 @@ var messages = {
 	"BuyTurkeyFirst" : ["Me: I should buy a turkey first!"],
 	"EmptyOven" : ["Me: I'll start cooking once I get a turkey."],
 	"OpenDoor" :["Me: I should probably try opening the oven door to measure the turkey's temperature."],
-	"BrokenLight" :["Me: The oven light is broken. I should buy a replacement."]
+	"BrokenLight" :["Me: The oven light is broken. I should buy a replacement."],
+	"BoughtTurkey" :["Me: The turkey's in the oven. It's time to get cooking!"],
+	"ClickStuffing" :["Me: I'll add that once I take the turkey out of the oven."]
 }
 
 //Terrible Results

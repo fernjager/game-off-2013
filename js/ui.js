@@ -947,13 +947,15 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
  		mouseOverKitchen.addEventListener("click",function(){
  			if ( that.name.indexOf("Temperature") != -1 ){
  				gameState.pubsub.publish( "ShowTempDialog", "" );
- 			}
-
- 			if ( that.name.indexOf("Cookbook") != -1 ){
+ 			} else if ( that.name.indexOf("Cookbook") != -1 ){
  				if(DEBUG) console.log("click, show cookbook");
  				gameState.pubsub.publish("ShowCookbook","");
  				gameState.pubsub.publish("Play", "Open_Cookbook");
- 			}
+ 			} else {
+				gameState.pubsub.publish( "ShowDialog", {seq:"ClickStuffing", autoAdvance:false} );
+			}
+
+			
  		});
 
  		mouseOver.addEventListener( "click", function(){
