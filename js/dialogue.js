@@ -81,13 +81,12 @@ function DialogUI( stage, gameState ){
 	this.autoplayButton = new Button( stage, gameState, 190, 285, 90, 50, "Autoplay", null )
 
 	 gameState.pubsub.subscribe( "Autoplay", function(){
-		 console.log("autoplay switch", that.autoplayOn.alpha)
 		 if (that.autoplayOn.alpha == 0) {
-			console.log("autoplay on");
+			gameState.autoplay = true;
 			that.autoplayOn.alpha = 1;
 			that.autoplayOff.alpha = 0;
 		} else {
-			console.log("autoplay off");
+			gameState.autoplay = false;
 			that.autoplayOn.alpha = 0;
 			that.autoplayOff.alpha = 1;
 		}
@@ -132,7 +131,8 @@ function DialogUI( stage, gameState ){
 
  		that.currentFace.y = 250;
  		that.currentFace = peopleImg[nextDialogue[0]] || that.currentFace;
- 		that.autoAdvance = textSeq.autoAdvance;
+ 		// that.autoAdvance = textSeq.autoAdvance;
+		that.autoAdvance = gameState.autoplay;
  		that.dialogMotionQueue = [DIALOG_SHOWING];
  	}
 
@@ -146,7 +146,7 @@ function DialogUI( stage, gameState ){
  		// check if there is something going on
  		if( !that.currDialogueSeq.more() ){
  			if(DEBUG) console.log("random story");
- 			this.showDialog( {seq: dialogueList[ randomKey ] || "Dad Tells a bad Joke", autoAdvance:true } );
+ 			this.showDialog( {seq: dialogueList[ randomKey ] || "Dad Tells a bad Joke", autoAdvance:gameState.autoplay } );
  			delete story[ dialogueList[ randomKey ] ];
  			gameState.dialogueHeard++;
  		}
@@ -200,7 +200,7 @@ function DialogUI( stage, gameState ){
     return {
     	tick: function(){
 
-    		if( that.autoAdvance == true && that.dialogBox.y ==0 && delayCounter > ( (that.textContent.text.length * MILLIS_PER_CHAR) < 2000 ? 2000 : (that.textContent.text.length * MILLIS_PER_CHAR)  ) ){
+    		if( gameState.autoplay == true && that.dialogBox.y ==0 && delayCounter > ( (that.textContent.text.length * MILLIS_PER_CHAR) < 2000 ? 2000 : (that.textContent.text.length * MILLIS_PER_CHAR)  ) ){
     			clickEvent();
     		}
 

@@ -18,6 +18,7 @@ function GameState(){
 	this.partnerGender = "Male";
     this.pronoun = "he";
 	this.partnerPronoun = "he";
+	this.autoplay = false;
 	this.wallet = 45.00;
 	this.hard = false;
 	this.boughtOvenLight = false;
