@@ -349,6 +349,10 @@ function KitchenScreen( stage, gameState ){
 		// Display the tutorial
 		DisplayTutorial(stage, gameState, 1);
 	}
+	else {
+		// If they have bought a turkey, let them know that it's already in the oven
+		gameState.pubsub.publish( "ShowDialog", {seq:"BoughtTurkey", autoAdvance:false} );
+	}
 
 
 	return {
