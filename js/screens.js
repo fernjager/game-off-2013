@@ -629,20 +629,28 @@ function ScoreScreen( stage, gameState ){
 	totalScore += parseInt(coreTempScore.toFixed(0));
 
 	resultsDialogue = [];
+
+	var rating = ''
+
 	if (totalScore>=1800) {
 		randomDiag = perfect;
+		rating = ' (Perfect)';
 	}
 	else if (totalScore>=1400) {
 		randomDiag = great;
+		rating = ' (Great)';
 	}
 	else if (totalScore>=1000) {
 		randomDiag = average;
+		rating = ' (Average)';
 	}
 	else if (totalScore>=400) {
 		randomDiag = subPar;
+		rating = ' (Subpar)';
 	}
 	else {
 		randomDiag = terrible;
+		rating = ' (Terrible)';
 	}
 
 	for (var i = 0; i<=5; i++) {
@@ -793,7 +801,7 @@ function ScoreScreen( stage, gameState ){
 
 		totalScore *= gameState.hardcoreModifier;
 
-		var totalText = new createjs.Text( totalScore.toFixed(0), "32px Arial", "black" );
+		var totalText = new createjs.Text( totalScore.toFixed(0) + rating, "32px Arial", "black" );
 		totalText.x = 250;
 		totalText.y = 550;
 		stage.addChild( totalText );
