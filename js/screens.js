@@ -6,6 +6,7 @@ function LoadingScreen( stage, gameState ){
     this.pictureFront = new createjs.Bitmap( "res/screens/LoadingScreen/PanFront.png" );
     this.cooking = new createjs.Bitmap( "res/screens/LoadingScreen/TextCooking.png" );
     this.done = new createjs.Bitmap( "res/screens/LoadingScreen/TextDone.png" );
+	this.start = new createjs.Bitmap( "res/screens/LoadingScreen/TextStart.png" );
     this.turkeyState = [ new createjs.Bitmap( "res/screens/LoadingScreen/Turkey0.png" ),
     					 new createjs.Bitmap( "res/screens/LoadingScreen/Turkey25.png" ),
     					 new createjs.Bitmap( "res/screens/LoadingScreen/Turkey50.png" ),
@@ -13,6 +14,7 @@ function LoadingScreen( stage, gameState ){
     					 new createjs.Bitmap( "res/screens/LoadingScreen/TurkeyDone.png" ) ];
 
 	this.done.alpha= 0;
+	this.start.alpha = 0;
 	stage.addChild( this.picture );
 	stage.addChild( this.cooking );
 	stage.addChild( this.turkeyState[0] );
@@ -29,6 +31,7 @@ function LoadingScreen( stage, gameState ){
 			that.lastPercent = percent;
 			stage.addChild( that.turkeyState[wholeNum] );
 			stage.addChild( that.pictureFront );
+			stage.addChild( that.start );
 		}
 
 		//If we're still on image one, don't fade it out, it's the base image!
@@ -40,10 +43,11 @@ function LoadingScreen( stage, gameState ){
 			that.turkeyState[4].alpha = 1;
 			that.cooking.alpha=0;
 			that.done.alpha = 1;
+			that.start.alpha = 2;
 
-			that.done.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
-		 	that.done.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
- 			that.done.addEventListener( "click",  function(){ gameState.pubsub.publish("SwitchScreen", "MainScreen"); });
+			that.start.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
+		 	that.start.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
+ 			that.start.addEventListener( "click",  function(){ gameState.pubsub.publish("SwitchScreen", "MainScreen"); });
 
 			that.turkeyState[4].addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
 		 	that.turkeyState[4].addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
@@ -53,6 +57,7 @@ function LoadingScreen( stage, gameState ){
 
 	stage.addChild( this.done );
 	stage.addChild( this.pictureFront );
+
 
 	return {
 		blit : function(){
