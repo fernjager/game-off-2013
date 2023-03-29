@@ -665,6 +665,37 @@ function ScoreScreen( stage, gameState ){
 		return (stringResult)
 	}
 
+	function updateScores(score){
+
+		var highScore = localStorage.getItem("highScore");
+		var pastScores = localStorage.getItem("pastScores");
+		console.log(pastScores)
+		var averageScore = 0;
+    	
+		//Assign new High Score
+		if (!highScore || highScore < score){
+			localStorage.setItem("highScore", score);
+		}
+
+		//Update Past scores
+		if(!pastScores){
+			localStorage.setItem("pastScores", [score]);
+		}
+		else{
+
+			if (pastScores.length == 3){
+				pastScores.shift()
+			}
+			localStorage.setItem("pastScores", pastScores.push(score))
+		}
+
+		//Calculate Average Score
+		averageScore = pastScores.reduce((a, b) => a + b, 0)/pastScores.length
+		localStorage.setItem("averageScore", averageScore);
+		return;
+		
+    }
+
 	gameState.pubsub.publish( "FadeOut", "" );
 
     this.background = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-1.png" );
@@ -810,6 +841,9 @@ function ScoreScreen( stage, gameState ){
 		stage.addChild( turkeyTypeModifierText );
 		stage.addChild( frillsModifierText );
 		stage.addChild( hardcoreModifierText );
+
+		updateScores(totalScore);
+
 	}} );
 
 
