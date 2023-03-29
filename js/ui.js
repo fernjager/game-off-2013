@@ -406,7 +406,7 @@ function OvenUI( stage, gameState ){
 	}
 
 	var temperatureText = new createjs.Text( "OFF", "40px Arial", "#ff7700" );
-	temperatureText.x = 50;
+	temperatureText.x = 40;
 	temperatureText.y = 147;
 	temperatureText.textBaseline = "alphabetic";
 
@@ -458,8 +458,14 @@ function OvenUI( stage, gameState ){
 				 	return;
 				 }
 
+				 if (temp >= 150) {
+					temp += "\u00B0F";
+				 }
+
 				 temperatureText.text = temp;
+
 			}
+
 
 			 // Tell our model to set the actual temperature
 			 gameState.ovenModel.changeTemp( UtilityFunctions.F2C( temperatureText.text == "OFF" ? 125 : parseInt( temperatureText.text ) ) );
