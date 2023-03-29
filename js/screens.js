@@ -6,6 +6,7 @@ function LoadingScreen( stage, gameState ){
     this.pictureFront = new createjs.Bitmap( "res/screens/LoadingScreen/PanFront.png" );
     this.cooking = new createjs.Bitmap( "res/screens/LoadingScreen/TextCooking.png" );
     this.done = new createjs.Bitmap( "res/screens/LoadingScreen/TextDone.png" );
+	this.start = new createjs.Bitmap( "res/screens/LoadingScreen/TextStart.png" );
     this.turkeyState = [ new createjs.Bitmap( "res/screens/LoadingScreen/Turkey0.png" ),
     					 new createjs.Bitmap( "res/screens/LoadingScreen/Turkey25.png" ),
     					 new createjs.Bitmap( "res/screens/LoadingScreen/Turkey50.png" ),
@@ -13,6 +14,7 @@ function LoadingScreen( stage, gameState ){
     					 new createjs.Bitmap( "res/screens/LoadingScreen/TurkeyDone.png" ) ];
 
 	this.done.alpha= 0;
+	this.start.alpha = 0;
 	stage.addChild( this.picture );
 	stage.addChild( this.cooking );
 	stage.addChild( this.turkeyState[0] );
@@ -29,6 +31,7 @@ function LoadingScreen( stage, gameState ){
 			that.lastPercent = percent;
 			stage.addChild( that.turkeyState[wholeNum] );
 			stage.addChild( that.pictureFront );
+			stage.addChild( that.start );
 		}
 
 		//If we're still on image one, don't fade it out, it's the base image!
@@ -40,10 +43,11 @@ function LoadingScreen( stage, gameState ){
 			that.turkeyState[4].alpha = 1;
 			that.cooking.alpha=0;
 			that.done.alpha = 1;
+			that.start.alpha = 2;
 
-			that.done.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
-		 	that.done.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
- 			that.done.addEventListener( "click",  function(){ gameState.pubsub.publish("SwitchScreen", "MainScreen"); });
+			that.start.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
+		 	that.start.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
+ 			that.start.addEventListener( "click",  function(){ gameState.pubsub.publish("SwitchScreen", "MainScreen"); });
 
 			that.turkeyState[4].addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
 		 	that.turkeyState[4].addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
@@ -53,6 +57,7 @@ function LoadingScreen( stage, gameState ){
 
 	stage.addChild( this.done );
 	stage.addChild( this.pictureFront );
+
 
 	return {
 		blit : function(){
@@ -353,9 +358,14 @@ function KitchenScreen( stage, gameState ){
 
 	new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null)
 
-	// If player did not buy a turkey, tell them
+	// If player did not buy a turkey
 	if( !gameState.turkeyBought ){
-		gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} );
+		// Display the tutorial
+		DisplayTutorial(stage, gameState, 1);
+	}
+	else {
+		// If they have bought a turkey, let them know that it's already in the oven
+		gameState.pubsub.publish( "ShowDialog", {seq:"BoughtTurkey", autoAdvance:false} );
 	}
 
 
@@ -368,6 +378,105 @@ function KitchenScreen( stage, gameState ){
 			}
 		}
 	}
+}
+
+function DisplayTutorial( stage, gameState, tutorialNum ){
+	var tutToDisplay;
+	var tutorialText;
+	var nextText;
+	var tutorialDone = false;
+	if (tutorialNum == 1) {
+		tutToDisplay = "res/screens/KitchenScreen/Tutorial1.png";
+		
+		tutorialText = new createjs.Text( "Click the help button anytime to see all available controls and options", "22px Arial", "black" );
+		tutorialText.x = 155;
+		tutorialText.y = 105;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Next >", "20px Arial", "black");
+		nextText.x = 455;
+		nextText.y = 220;
+
+	} else if (tutorialNum == 2) {
+		tutToDisplay = "res/screens/KitchenScreen/Tutorial2.png"
+
+		tutorialText = new createjs.Text( "Click the oven door to open it a crack, and click and drag the door to open it fully", "22px Arial", "black" );
+		tutorialText.x = 265;
+		tutorialText.y = 275;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Next >", "20px Arial", "black");
+		nextText.x = 575;
+		nextText.y = 390;
+
+	} else if (tutorialNum == 3) {
+		if (gameState.hard == true) {
+			tutToDisplay = "res/screens/KitchenScreen/TutorialFinal.png"
+			tutorialDone = true;
+
+			tutorialText = new createjs.Text( "Click on the brochure to go to the store. Your turkey awaits!", "22px Arial", "black" );
+			tutorialText.x = 275;
+			tutorialText.y = 275;
+			tutorialText.lineWidth = 325;
+			tutorialText.lineHeight = 30;
+
+			nextText = new createjs.Text("Finish", "20px Arial", "black");
+			nextText.x = 590;
+			nextText.y = 375;
+		} else {
+			tutToDisplay = "res/screens/KitchenScreen/Tutorial3Casual.png"
+
+			tutorialText = new createjs.Text( "Click the clock to skip ahead by 20 minutes", "22px Arial", "black" );
+			tutorialText.x = 345;
+			tutorialText.y = 90;
+			tutorialText.lineWidth = 325;
+			tutorialText.lineHeight = 30;
+
+			nextText = new createjs.Text("Next >", "20px Arial", "black");
+			nextText.x = 660;
+			nextText.y = 195;
+
+		}
+	} else if (tutorialNum == 4) {
+		tutToDisplay = "res/screens/KitchenScreen/TutorialFinal.png"
+		tutorialDone = true;
+
+		tutorialText = new createjs.Text( "Click on the brochure to go to the store. Your turkey awaits!", "22px Arial", "black" );
+		tutorialText.x = 275;
+		tutorialText.y = 275;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Finish", "20px Arial", "black");
+		nextText.x = 590;
+		nextText.y = 375;
+	}
+	
+	var tutorial = new createjs.Bitmap( tutToDisplay );
+
+	tutorial.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
+	tutorial.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
+	tutorial.addEventListener( "click", NextTutorial);
+
+
+    stage.addChild( tutorial );
+	stage.addChild( tutorialText );
+	stage.addChild( nextText );
+
+
+	function NextTutorial(){ 
+		stage.removeChild(tutorial);
+		stage.removeChild(tutorialText);
+		stage.removeChild(nextText);
+		if (tutorialDone) {
+			// Once the tutorial is done, bring up dialogue that tells the user to go buy a turkey
+			gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} ) 
+		} else {
+			DisplayTutorial(stage, gameState, tutorialNum+1) 
+		}
+	};
 }
 
 function MarketScreen( stage, gameState ){
@@ -547,20 +656,28 @@ function ScoreScreen( stage, gameState ){
 	totalScore += parseInt(coreTempScore.toFixed(0));
 
 	resultsDialogue = [];
+
+	var rating = ''
+
 	if (totalScore>=1800) {
 		randomDiag = perfect;
+		rating = ' (Perfect)';
 	}
 	else if (totalScore>=1400) {
 		randomDiag = great;
+		rating = ' (Great)';
 	}
 	else if (totalScore>=1000) {
 		randomDiag = average;
+		rating = ' (Average)';
 	}
 	else if (totalScore>=400) {
 		randomDiag = subPar;
+		rating = ' (Subpar)';
 	}
 	else {
 		randomDiag = terrible;
+		rating = ' (Terrible)';
 	}
 
 	for (var i = 0; i<=5; i++) {
@@ -713,7 +830,7 @@ function ScoreScreen( stage, gameState ){
 
 		totalScore *= gameState.hardcoreModifier;
 
-		var totalText = new createjs.Text( totalScore.toFixed(0), "32px Arial", "black" );
+		var totalText = new createjs.Text( totalScore.toFixed(0) + rating, "32px Arial", "black" );
 		totalText.x = 250;
 		totalText.y = 550;
 		stage.addChild( totalText );

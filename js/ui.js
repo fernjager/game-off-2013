@@ -406,7 +406,7 @@ function OvenUI( stage, gameState ){
 	}
 
 	var temperatureText = new createjs.Text( "OFF", "40px Arial", "#ff7700" );
-	temperatureText.x = 50;
+	temperatureText.x = 40;
 	temperatureText.y = 147;
 	temperatureText.textBaseline = "alphabetic";
 
@@ -458,8 +458,14 @@ function OvenUI( stage, gameState ){
 				 	return;
 				 }
 
+				 if (temp >= 150) {
+					temp += "\u00B0F";
+				 }
+
 				 temperatureText.text = temp;
+
 			}
+
 
 			 // Tell our model to set the actual temperature
 			 gameState.ovenModel.changeTemp( UtilityFunctions.F2C( temperatureText.text == "OFF" ? 125 : parseInt( temperatureText.text ) ) );
@@ -947,13 +953,15 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
  		mouseOverKitchen.addEventListener("click",function(){
  			if ( that.name.indexOf("Temperature") != -1 ){
  				gameState.pubsub.publish( "ShowTempDialog", "" );
- 			}
-
- 			if ( that.name.indexOf("Cookbook") != -1 ){
+ 			} else if ( that.name.indexOf("Cookbook") != -1 ){
  				if(DEBUG) console.log("click, show cookbook");
  				gameState.pubsub.publish("ShowCookbook","");
  				gameState.pubsub.publish("Play", "Open_Cookbook");
- 			}
+ 			} else {
+				gameState.pubsub.publish( "ShowDialog", {seq:"ClickStuffing", autoAdvance:false} );
+			}
+
+			
  		});
 
  		mouseOver.addEventListener( "click", function(){
