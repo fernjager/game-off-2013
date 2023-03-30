@@ -692,6 +692,49 @@ function ScoreScreen( stage, gameState ){
 		return (stringResult)
 	}
 
+	function updateScores(score){
+
+		if (isNaN(score)){
+			return;
+		}
+
+		//High Score
+		if (!('highScore' in localStorage)){
+			localStorage.setItem("highScore", score);
+		}
+		else{
+			if(localStorage.getItem("highScore") < score){
+				localStorage.setItem("highScore", score);
+			}
+		}
+
+		//Past scores
+		if (!('pastScores' in localStorage)){
+			var scores = JSON.stringify([score]);
+			localStorage.setItem("pastScores", scores);
+		}
+		else{
+			
+			var pastScores = JSON.parse(localStorage.getItem("pastScores"));
+			
+			if(pastScores.length == 3){
+				pastScores.shift()
+			}
+			pastScores.push(score)
+
+			localStorage.setItem("pastScores", JSON.stringify(pastScores));
+			
+		}
+
+		//Calculate Average Score
+		var averageScore = 0;
+		var pastScores = JSON.parse(localStorage.getItem("pastScores"));
+		averageScore = pastScores.reduce((a, b) => a + b, 0)/pastScores.length
+		localStorage.setItem("averageScore", averageScore);
+
+		
+    }
+
 	gameState.pubsub.publish( "FadeOut", "" );
 
     this.background = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-1.png" );
@@ -830,15 +873,55 @@ function ScoreScreen( stage, gameState ){
 
 		totalScore *= gameState.hardcoreModifier;
 
+		updateScores(totalScore);
+
 		var totalText = new createjs.Text( totalScore.toFixed(0) + rating, "32px Arial", "black" );
 		totalText.x = 250;
 		totalText.y = 550;
 		stage.addChild( totalText );
 
+		//High Score Text
+		var highScore = localStorage.getItem('highScore') ?  localStorage.getItem('highScore') : '';
+		var highScoreText = new createjs.Text( isNaN(parseInt(highScore).toFixed(0)) ? '' : parseInt(highScore).toFixed(0), "20px Arial", "black" );
+		highScoreText.x = 600;
+		highScoreText.y = 400;
+		stage.addChild( highScoreText );
+
+		//Average Score Text
+		var averageScore = localStorage.getItem('averageScore') ?  localStorage.getItem('averageScore') : '';
+		var averageScoreText = new createjs.Text( isNaN(parseInt(averageScore).toFixed(0)) ? '' : parseInt(averageScore).toFixed(0), "20px Arial", "black" );
+		averageScoreText.x = highScoreText.x;
+		averageScoreText.y = highScoreText.y + 30;
+		stage.addChild( averageScoreText );
+
+		//Most Recent Score text
+		var pastScore1 = JSON.parse(localStorage.getItem('pastScores'))[2] ?  JSON.parse(localStorage.getItem('pastScores'))[2] : '';
+		var pastScoreText1 = new createjs.Text( isNaN(parseInt(pastScore1).toFixed(0)) ? '' : parseInt(pastScore1).toFixed(0), "20px Arial", "black" );
+		pastScoreText1.x = averageScoreText.x;
+		pastScoreText1.y = averageScoreText.y + 30;
+		stage.addChild( pastScoreText1 );
+
+		//Second Most Recent Score text
+		var pastScore2 = JSON.parse(localStorage.getItem('pastScores'))[1] ?  JSON.parse(localStorage.getItem('pastScores'))[1] : '';
+		var pastScoreText2 = new createjs.Text( isNaN(parseInt(pastScore2).toFixed(0)) ? '' : parseInt(pastScore2).toFixed(0), "20px Arial", "black" );
+		pastScoreText2.x = pastScoreText1.x;
+		pastScoreText2.y = pastScoreText1.y + 20;
+		stage.addChild( pastScoreText2 );
+
+		//Third Most Recent Score text
+		var pastScore3 = JSON.parse(localStorage.getItem('pastScores'))[0] ?  JSON.parse(localStorage.getItem('pastScores'))[0] : '';
+		var pastScoreText3 = new createjs.Text( isNaN(parseInt(pastScore3).toFixed(0)) ? '' : parseInt(pastScore3).toFixed(0), "20px Arial", "black" );
+		pastScoreText3.x = pastScoreText2.x;
+		pastScoreText3.y = pastScoreText2.y + 20;
+		stage.addChild( pastScoreText3 );
+
 		stage.addChild( stuffingTypeModifierText );
 		stage.addChild( turkeyTypeModifierText );
 		stage.addChild( frillsModifierText );
 		stage.addChild( hardcoreModifierText );
+
+
+
 	}} );
 
 

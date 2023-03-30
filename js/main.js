@@ -1,6 +1,6 @@
 // Robert- Here be dragons
 
-var DEBUG = 1;
+var DEBUG = 0;
 window.muted = false
 
 function GameState(){
