@@ -100,7 +100,11 @@ function MainScreen( stage, gameState ){
 	// buttons info/credits/start
  	new ImgButton( stage, gameState, 571,527, "res/screens/MainScreen/ButtonStart.png", "res/screens/MainScreen/ButtonStart.png","SwitchScreen", "DifficultyScreen", "Click"  );
  	new ImgButton( stage, gameState, 17,470, "res/screens/MainScreen/ButtonHelp.png", "res/screens/MainScreen/ButtonHelp.png",null, null, "Click", function(){ gameState.pubsub.publish("ShowHelp",""); } );
- 	new ImgButton( stage, gameState, 17,527, "res/screens/MainScreen/ButtonCredits.png", "res/screens/MainScreen/ButtonCredits.png","SwitchScreen", "CreditsScreen", "Click"  );
+ 	
+	new ImgButton( stage, gameState, 17,527, "res/screens/MainScreen/ButtonCredits.png", "res/screens/MainScreen/ButtonCredits.png","SwitchScreen", "CreditsScreen", "Click"  );
+
+	//Mute button
+	new VolumeButton(stage, gameState, 730, 20, "ToggleMute", null, "Click", null)
 
  	gameState.pubsub.publish( "BackgroundLoop", {name:"TitleMusic", pos:5650, volume:0.7} );
     this.uiElems = [];
@@ -258,6 +262,9 @@ function DifficultyScreen( stage, gameState ){
 	// start button
 	stage.addChild( new Button( stage, gameState, 535, 530, 200, 50, "StartGame", null ) );
 
+	//Mute button
+	new VolumeButton(stage, gameState, 730, 20, "ToggleMute", null, "Click", null)
+
  	gameState.pubsub.subscribe( "ChangePlayerGender", function(gender){
  		gameState.playerGender=gender;
  		if( gender == "Male" ){
@@ -348,6 +355,8 @@ function KitchenScreen( stage, gameState ){
 		gameState.pubsub.publish("SwitchScreen", "MarketScreen");
  		gameState.storeVisits++;
 	} );
+
+	new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null)
 
 	// If player did not buy a turkey
 	if( !gameState.turkeyBought ){
@@ -505,10 +514,19 @@ function MarketScreen( stage, gameState ){
 	 	clipboardWeight.y = 540;
 	 	clipboardWeight.lineWidth = 175;
 
-	// Play soundz
-	gameState.pubsub.publish( "Play", {name:"Entrance", volume:0.3} );
-	gameState.pubsub.publish( "BackgroundLoop", {name:"MarketMusic", volume:1} );
-	gameState.pubsub.publish( "BackgroundLoop", {name:"MarketBackgroundSound", volume:0.4} );
+	if (window.muted){
+		// Mute sounds
+		gameState.pubsub.publish( "Play", {name:"Entrance", volume:0} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketMusic", volume:0} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketBackgroundSound", volume:0} );
+	}
+	else{
+		// Play soundz
+		gameState.pubsub.publish( "Play", {name:"Entrance", volume:0.3} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketMusic", volume:1} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketBackgroundSound", volume:0.4} );
+	}
+
 
     stage.addChild(this.background);
 
@@ -523,6 +541,7 @@ function MarketScreen( stage, gameState ){
 
     this.uiElems = [];
     this.uiElems.push( new ImgButton( stage, gameState, 690,0, "res/items/ExitSign.png", "res/items/ExitGlow.png","SwitchScreen", "KitchenScreen", "Click"  ) );
+	
 
     var marketItemKeys = Object.keys(gameState.marketItems);
     for (var index in marketItemKeys ) {
@@ -560,6 +579,8 @@ function MarketScreen( stage, gameState ){
 	gameState.pubsub.subscribe("ShowPrice", this.showPrice );
     gameState.pubsub.subscribe("WalletAmount", this.setWalletAmount);
     gameState.pubsub.subscribe("ClearClipboard", this.clearClipboard);
+
+	new VolumeButton(stage, gameState, 730, 70, "ToggleMute", null, "Click", null)
 
     return {
 		blit : function(){
@@ -612,6 +633,7 @@ function ScoreScreen( stage, gameState ){
 	    "Pastured Turkey": 1.05,
 		"General Turkey": 1.00
     };
+
      // Optimal Temperature to be served at
 	this.scoreDistribution= function(inputTemp, layer) {
 		desiredAverage = 165;
@@ -722,6 +744,8 @@ function ScoreScreen( stage, gameState ){
     background1 = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-2.png" );
     background1.alpha = 0;
 	stage.addChild( background1 );
+	
+	new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null);
 
 	for (i in gameState.turkeyStates){
 		gameState.turkeyStates[i].scaleX = gameState.turkeyStates[i].scaleY = 1;
@@ -914,6 +938,7 @@ function CreditsScreen( stage, gameState ){
     stage.addChild( new Button( stage, gameState, 698, 533, 80, 50, "SwitchScreen", "MainScreen" ) );
 
     this.uiElems = [];
+	this.uiElems.push(new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null));
     return {
 		blit : function(){
 
