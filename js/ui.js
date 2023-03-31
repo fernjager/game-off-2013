@@ -406,7 +406,7 @@ function OvenUI( stage, gameState ){
 	}
 
 	var temperatureText = new createjs.Text( "OFF", "40px Arial", "#ff7700" );
-	temperatureText.x = 50;
+	temperatureText.x = 40;
 	temperatureText.y = 147;
 	temperatureText.textBaseline = "alphabetic";
 
@@ -458,8 +458,14 @@ function OvenUI( stage, gameState ){
 				 	return;
 				 }
 
+				 if (temp >= 150) {
+					temp += "\u00B0F";
+				 }
+
 				 temperatureText.text = temp;
+
 			}
+
 
 			 // Tell our model to set the actual temperature
 			 gameState.ovenModel.changeTemp( UtilityFunctions.F2C( temperatureText.text == "OFF" ? 125 : parseInt( temperatureText.text ) ) );
@@ -947,13 +953,15 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
  		mouseOverKitchen.addEventListener("click",function(){
  			if ( that.name.indexOf("Temperature") != -1 ){
  				gameState.pubsub.publish( "ShowTempDialog", "" );
- 			}
-
- 			if ( that.name.indexOf("Cookbook") != -1 ){
+ 			} else if ( that.name.indexOf("Cookbook") != -1 ){
  				if(DEBUG) console.log("click, show cookbook");
  				gameState.pubsub.publish("ShowCookbook","");
  				gameState.pubsub.publish("Play", "Open_Cookbook");
- 			}
+ 			} else {
+				gameState.pubsub.publish( "ShowDialog", {seq:"ClickStuffing", autoAdvance:false} );
+			}
+
+			
  		});
 
  		mouseOver.addEventListener( "click", function(){
@@ -1071,6 +1079,66 @@ function ImgButton( stage, gameState, x, y, mouseOutImg, mouseOverImg, eventCmd,
 		tick: function(){}
 	}
 }
+
+function VolumeButton( stage, gameState, x, y, eventCmd, arg, sound, altfunc ){
+
+	var mouseOverMute = "/res/controls/volume-mute-hover.png";
+	var mouseOutMute = "/res/controls/volume-mute.png";
+
+	var mouseOverVolume = "/res/controls/volume-hover.png";
+	var mouseOutVolume = "/res/controls/volume.png";
+	
+	if (window.muted == false){
+		var mouseOver = new createjs.Bitmap(mouseOverVolume);
+		var mouseOut = new createjs.Bitmap(mouseOutVolume);
+	}
+	else{
+		var mouseOver = new createjs.Bitmap(mouseOverMute);
+		var mouseOut = new createjs.Bitmap(mouseOutMute);
+	}
+	mouseOver.x = mouseOut.x = x;
+	mouseOver.y = mouseOut.y = y;
+	 mouseOut.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; mouseOver.visible = true; mouseOut.visible = false;  } );
+	 mouseOut.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; mouseOver.visible = false; mouseOut.visible = true; } );
+	 mouseOver.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; mouseOver.visible = true; mouseOut.visible = false;  } );
+	 mouseOver.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; mouseOver.visible = false; mouseOut.visible = true; } );
+	 mouseOver.addEventListener( "click", function(){
+
+		if(window.muted == false){
+			mouseOver.image.src = mouseOverMute;
+			mouseOut.image.src = mouseOutMute;
+			window.muted = true;
+			
+		 }
+		 else{
+			mouseOver.image.src = mouseOverVolume;
+			mouseOut.image.src = mouseOutVolume;
+			window.muted = false
+		 }
+
+		 if( sound ){
+			 gameState.pubsub.publish("Play", sound );
+		 }
+		 if( !altfunc){
+			 gameState.pubsub.publish( eventCmd, arg );
+			 return;
+		 }
+		 
+		 altfunc();
+
+
+	 } );
+
+	 mouseOver.visible = false;
+	stage.addChild( mouseOut );
+	stage.addChild( mouseOver );
+
+return {
+	tick: function(){}
+}
+}
+
+
 
 function Button( stage, gameState, x_orig, y_orig, x_dest, y_dest, eventCmd, arg, altfunc ){
 	var that = this;

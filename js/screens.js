@@ -6,6 +6,7 @@ function LoadingScreen( stage, gameState ){
     this.pictureFront = new createjs.Bitmap( "res/screens/LoadingScreen/PanFront.png" );
     this.cooking = new createjs.Bitmap( "res/screens/LoadingScreen/TextCooking.png" );
     this.done = new createjs.Bitmap( "res/screens/LoadingScreen/TextDone.png" );
+	this.start = new createjs.Bitmap( "res/screens/LoadingScreen/TextStart.png" );
     this.turkeyState = [ new createjs.Bitmap( "res/screens/LoadingScreen/Turkey0.png" ),
     					 new createjs.Bitmap( "res/screens/LoadingScreen/Turkey25.png" ),
     					 new createjs.Bitmap( "res/screens/LoadingScreen/Turkey50.png" ),
@@ -13,6 +14,7 @@ function LoadingScreen( stage, gameState ){
     					 new createjs.Bitmap( "res/screens/LoadingScreen/TurkeyDone.png" ) ];
 
 	this.done.alpha= 0;
+	this.start.alpha = 0;
 	stage.addChild( this.picture );
 	stage.addChild( this.cooking );
 	stage.addChild( this.turkeyState[0] );
@@ -29,6 +31,7 @@ function LoadingScreen( stage, gameState ){
 			that.lastPercent = percent;
 			stage.addChild( that.turkeyState[wholeNum] );
 			stage.addChild( that.pictureFront );
+			stage.addChild( that.start );
 		}
 
 		//If we're still on image one, don't fade it out, it's the base image!
@@ -40,10 +43,11 @@ function LoadingScreen( stage, gameState ){
 			that.turkeyState[4].alpha = 1;
 			that.cooking.alpha=0;
 			that.done.alpha = 1;
+			that.start.alpha = 2;
 
-			that.done.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
-		 	that.done.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
- 			that.done.addEventListener( "click",  function(){ gameState.pubsub.publish("SwitchScreen", "MainScreen"); });
+			that.start.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
+		 	that.start.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
+ 			that.start.addEventListener( "click",  function(){ gameState.pubsub.publish("SwitchScreen", "MainScreen"); });
 
 			that.turkeyState[4].addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
 		 	that.turkeyState[4].addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
@@ -53,6 +57,7 @@ function LoadingScreen( stage, gameState ){
 
 	stage.addChild( this.done );
 	stage.addChild( this.pictureFront );
+
 
 	return {
 		blit : function(){
@@ -95,7 +100,11 @@ function MainScreen( stage, gameState ){
 	// buttons info/credits/start
  	new ImgButton( stage, gameState, 571,527, "res/screens/MainScreen/ButtonStart.png", "res/screens/MainScreen/ButtonStart.png","SwitchScreen", "DifficultyScreen", "Click"  );
  	new ImgButton( stage, gameState, 17,470, "res/screens/MainScreen/ButtonHelp.png", "res/screens/MainScreen/ButtonHelp.png",null, null, "Click", function(){ gameState.pubsub.publish("ShowHelp",""); } );
- 	new ImgButton( stage, gameState, 17,527, "res/screens/MainScreen/ButtonCredits.png", "res/screens/MainScreen/ButtonCredits.png","SwitchScreen", "CreditsScreen", "Click"  );
+ 	
+	new ImgButton( stage, gameState, 17,527, "res/screens/MainScreen/ButtonCredits.png", "res/screens/MainScreen/ButtonCredits.png","SwitchScreen", "CreditsScreen", "Click"  );
+
+	//Mute button
+	new VolumeButton(stage, gameState, 730, 20, "ToggleMute", null, "Click", null)
 
  	gameState.pubsub.publish( "BackgroundLoop", {name:"TitleMusic", pos:5650, volume:0.7} );
     this.uiElems = [];
@@ -119,7 +128,7 @@ function MainScreen( stage, gameState ){
 function DifficultyScreen( stage, gameState ){
 	var that = this;
 
-    this.background = new createjs.Bitmap( "res/screens/DifficultyScreen/Difficulty-Selection.png" );
+    this.background = new createjs.Bitmap( "res/screens/DifficultyScreen/Difficulty-SelectionRevised.png" );
     stage.addChild( this.background );
 
     var turkeyAnimations = { peck:[14,24,"peck"], ruffle:[0,13,"ruffle"], stare:[25,35,"stare"] };
@@ -148,23 +157,46 @@ function DifficultyScreen( stage, gameState ){
  	stage.addChild( this.grassLayer );
 
  	// Difficulty selection UI
- 	this.buttonsAndText = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonsandText.png" );
+ 	this.buttonsAndText = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonsandTextRevised.png" );
  	stage.addChild( this.buttonsAndText );
 
- 	this.maleSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonMale.png" );
- 	stage.addChild( this.maleSelection );
+ 	this.malePlayerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPlayerMale.png" );
+ 	stage.addChild( this.malePlayerSelection );
 
- 	this.femaleSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonFemale.png" );
- 	this.femaleSelection.alpha = 0;
- 	stage.addChild( this.femaleSelection );
+ 	this.femalePlayerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPlayerFemale.png" );
+ 	this.femalePlayerSelection.alpha = 0;
+ 	stage.addChild( this.femalePlayerSelection );
+
+	this.malePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerMale.png" );
+ 	stage.addChild( this.malePartnerSelection );
+
+ 	this.femalePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerFemale.png" );
+ 	this.femalePartnerSelection.alpha = 0;
+ 	stage.addChild( this.femalePartnerSelection );
+
+	// Difficulty
+	this.casualMode = new createjs.Bitmap( "res/screens/DifficultyScreen/DifficultyCasual.png" );
+ 	stage.addChild( this.casualMode );
+
+ 	this.hardcoreMode = new createjs.Bitmap( "res/screens/DifficultyScreen/DifficultyHardcore.png" );
+ 	this.hardcoreMode.alpha = 0;
+ 	stage.addChild( this.hardcoreMode );
 
  	var nameInput = new createjs.Text( "", "48px Arial", "black" );
-   		nameInput.x = 47;
-	 	nameInput.y = 85;
-	 	nameInput.lineWidth = 175;
+
+	//Create cursor text object
+	var cursor = new createjs.Text( "|", "48px Arial", "black" );
+
+	//Append to nameInput text
+	nameInput.text += cursor.text;
+	
+   	
+	nameInput.x = 47;
+	nameInput.y = 85;
+	nameInput.lineWidth = 175;
 
 	stage.addChild( nameInput );
-
+	
 	// handle keyboard typing
     document.onkeyup = function(event){
     	// keycode
@@ -179,8 +211,11 @@ function DifficultyScreen( stage, gameState ){
             }
 
             if( keynum != 8 && keynum < 91 && keynum > 47 && nameInput.text.length < 22 ){
-            	nameInput.text += String.fromCharCode(keynum);
-            	gameState.name = nameInput.text;
+
+				let len = nameInput.text.length
+            	nameInput.text = nameInput.text.substring(0,len-1) + String.fromCharCode(keynum) + cursor.text;
+            	gameState.name = nameInput.text.substring(0,len);
+				
             }
     };
 
@@ -198,33 +233,82 @@ function DifficultyScreen( stage, gameState ){
             }
 
             if(keynum == 8 && nameInput.text.length > 0 ){
-            	nameInput.text = nameInput.text.substr(0, nameInput.text.length-1);
-            	gameState.name = nameInput.text;
+				len = nameInput.text.length
+            	nameInput.text = nameInput.text.substring(0, len-2);
+				nameInput.text += cursor.text
+            	gameState.name = nameInput.text.substring(0,len-2)
+
             }
         event.preventDefault();
     }
 
- 	// Easy/Hard Button
- 	stage.addChild( new Button( stage, gameState, 500, 235, 100, 55, "ChangeGender", "Male" ) );
- 	stage.addChild( new Button( stage, gameState, 500, 300, 100, 55, "ChangeGender", "Female" ) );
+ 	// Player and partner gender
+ 	stage.addChild( new Button( stage, gameState, 530, 205, 50, 25, "ChangePlayerGender", "Male" ) );
+ 	stage.addChild( new Button( stage, gameState, 625, 205, 50, 25, "ChangePlayerGender", "Female" ) );
 
- 	stage.addChild( new Button( stage, gameState, 503, 370, 200, 55, null, null, function(){ document.onkeyup = function(){}; gameState.hard = false; gameState.gameStarted = true; gameState.hardcoreModifier=1; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
- 	stage.addChild( new Button( stage, gameState, 500, 495, 205, 55, null, null, function(){ document.onkeydown = function(){};  gameState.hard = true;  gameState.gameStarted = true; gameState.hardcoreModifier=20; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
+	stage.addChild( new Button( stage, gameState, 530, 290, 50, 25, "ChangePartnerGender", "Male" ) );
+ 	stage.addChild( new Button( stage, gameState, 625, 290, 50, 25, "ChangePartnerGender", "Female" ) );
 
+	// Easy/Hard Button
+ 	// stage.addChild( new Button( stage, gameState, 535, 335, 160, 40, null, null, function(){ document.onkeyup = function(){}; gameState.hard = false; gameState.gameStarted = true; gameState.hardcoreModifier=1; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
+ 	// stage.addChild( new Button( stage, gameState, 535, 435, 160, 40, null, null, function(){ document.onkeydown = function(){};  gameState.hard = true;  gameState.gameStarted = true; gameState.hardcoreModifier=20; gameState.pubsub.publish("SwitchScreen", "KitchenScreen"); } ) );
+
+	stage.addChild( new Button( stage, gameState, 535, 335, 160, 40, "SetDifficulty", "Casual" ) );
+ 	stage.addChild( new Button( stage, gameState, 535, 435, 160, 40, "SetDifficulty", "Hardcore" ) );
+
+	// back button
  	stage.addChild( new Button( stage, gameState, 35, 495, 85, 55, "SwitchScreen", "MainScreen" ) );
 
- 	gameState.pubsub.subscribe( "ChangeGender", function(gender){
- 		gameState.gender=gender;
+	// start button
+	stage.addChild( new Button( stage, gameState, 535, 530, 200, 50, "StartGame", null ) );
+
+	//Mute button
+	new VolumeButton(stage, gameState, 730, 20, "ToggleMute", null, "Click", null)
+
+ 	gameState.pubsub.subscribe( "ChangePlayerGender", function(gender){
+ 		gameState.playerGender=gender;
  		if( gender == "Male" ){
- 			that.maleSelection.alpha = 1;
- 			that.femaleSelection.alpha = 0;
- 			gameState.pronoun = "he";
+ 			that.malePlayerSelection.alpha = 1;
+ 			that.femalePlayerSelection.alpha = 0;
+ 			gameState.playerPronoun = "he";
  		}else{
- 			that.maleSelection.alpha = 0;
- 			that.femaleSelection.alpha = 1;
- 			gameState.pronoun = "she";
+ 			that.malePlayerSelection.alpha = 0;
+ 			that.femalePlayerSelection.alpha = 1;
+ 			gameState.playerPronoun = "she";
  		}
  	})
+	 gameState.pubsub.subscribe( "ChangePartnerGender", function(gender){
+		gameState.partnerGender=gender;
+		if( gender == "Male" ){
+			that.malePartnerSelection.alpha = 1;
+			that.femalePartnerSelection.alpha = 0;
+			gameState.partnerPronoun = "he";
+		}else{
+			that.malePartnerSelection.alpha = 0;
+			that.femalePartnerSelection.alpha = 1;
+			gameState.partnerPronoun = "she";
+		}
+	})
+
+	gameState.pubsub.subscribe( "SetDifficulty", function(difficulty){
+		if ( difficulty == "Casual") {
+			gameState.hard = false;
+			gameState.hardcoreModifier = 1;
+			that.casualMode.alpha = 1;
+			that.hardcoreMode.alpha = 0;
+		} else {
+			gameState.hard = true;
+			gameState.hardcoreModifier = 20;
+			that.casualMode.alpha = 0;
+			that.hardcoreMode.alpha = 1;
+		}
+	})
+
+	gameState.pubsub.subscribe( "StartGame", function(){
+		gameState.gameStarted = true; 
+		gameState.pubsub.publish("SwitchScreen", "KitchenScreen");
+	})
+
 	return {
 		blit : function(){
 			if( createjs.Ticker.getTicks() %50 == 0 ){
@@ -272,9 +356,16 @@ function KitchenScreen( stage, gameState ){
  		gameState.storeVisits++;
 	} );
 
-	// If player did not buy a turkey, tell them
+	new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null)
+
+	// If player did not buy a turkey
 	if( !gameState.turkeyBought ){
-		gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} );
+		// Display the tutorial
+		DisplayTutorial(stage, gameState, 1);
+	}
+	else {
+		// If they have bought a turkey, let them know that it's already in the oven
+		gameState.pubsub.publish( "ShowDialog", {seq:"BoughtTurkey", autoAdvance:false} );
 	}
 
 
@@ -287,6 +378,105 @@ function KitchenScreen( stage, gameState ){
 			}
 		}
 	}
+}
+
+function DisplayTutorial( stage, gameState, tutorialNum ){
+	var tutToDisplay;
+	var tutorialText;
+	var nextText;
+	var tutorialDone = false;
+	if (tutorialNum == 1) {
+		tutToDisplay = "res/screens/KitchenScreen/Tutorial1.png";
+		
+		tutorialText = new createjs.Text( "Click the help button anytime to see all available controls and options", "22px Arial", "black" );
+		tutorialText.x = 155;
+		tutorialText.y = 105;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Next >", "20px Arial", "black");
+		nextText.x = 455;
+		nextText.y = 220;
+
+	} else if (tutorialNum == 2) {
+		tutToDisplay = "res/screens/KitchenScreen/Tutorial2.png"
+
+		tutorialText = new createjs.Text( "Click the oven door to open it a crack, and click and drag the door to open it fully", "22px Arial", "black" );
+		tutorialText.x = 265;
+		tutorialText.y = 275;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Next >", "20px Arial", "black");
+		nextText.x = 575;
+		nextText.y = 390;
+
+	} else if (tutorialNum == 3) {
+		if (gameState.hard == true) {
+			tutToDisplay = "res/screens/KitchenScreen/TutorialFinal.png"
+			tutorialDone = true;
+
+			tutorialText = new createjs.Text( "Click on the brochure to go to the store. Your turkey awaits!", "22px Arial", "black" );
+			tutorialText.x = 275;
+			tutorialText.y = 275;
+			tutorialText.lineWidth = 325;
+			tutorialText.lineHeight = 30;
+
+			nextText = new createjs.Text("Finish", "20px Arial", "black");
+			nextText.x = 590;
+			nextText.y = 375;
+		} else {
+			tutToDisplay = "res/screens/KitchenScreen/Tutorial3Casual.png"
+
+			tutorialText = new createjs.Text( "Click the clock to skip ahead by 20 minutes", "22px Arial", "black" );
+			tutorialText.x = 345;
+			tutorialText.y = 90;
+			tutorialText.lineWidth = 325;
+			tutorialText.lineHeight = 30;
+
+			nextText = new createjs.Text("Next >", "20px Arial", "black");
+			nextText.x = 660;
+			nextText.y = 195;
+
+		}
+	} else if (tutorialNum == 4) {
+		tutToDisplay = "res/screens/KitchenScreen/TutorialFinal.png"
+		tutorialDone = true;
+
+		tutorialText = new createjs.Text( "Click on the brochure to go to the store. Your turkey awaits!", "22px Arial", "black" );
+		tutorialText.x = 275;
+		tutorialText.y = 275;
+		tutorialText.lineWidth = 325;
+		tutorialText.lineHeight = 30;
+
+		nextText = new createjs.Text("Finish", "20px Arial", "black");
+		nextText.x = 590;
+		nextText.y = 375;
+	}
+	
+	var tutorial = new createjs.Bitmap( tutToDisplay );
+
+	tutorial.addEventListener( "mouseover", function(){ document.body.style.cursor='pointer'; } );
+	tutorial.addEventListener( "mouseout", function(){ document.body.style.cursor='default'; } );
+	tutorial.addEventListener( "click", NextTutorial);
+
+
+    stage.addChild( tutorial );
+	stage.addChild( tutorialText );
+	stage.addChild( nextText );
+
+
+	function NextTutorial(){ 
+		stage.removeChild(tutorial);
+		stage.removeChild(tutorialText);
+		stage.removeChild(nextText);
+		if (tutorialDone) {
+			// Once the tutorial is done, bring up dialogue that tells the user to go buy a turkey
+			gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} ) 
+		} else {
+			DisplayTutorial(stage, gameState, tutorialNum+1) 
+		}
+	};
 }
 
 function MarketScreen( stage, gameState ){
@@ -324,10 +514,19 @@ function MarketScreen( stage, gameState ){
 	 	clipboardWeight.y = 580;
 	 	clipboardWeight.lineWidth = 110;
 
-	// Play soundz
-	gameState.pubsub.publish( "Play", {name:"Entrance", volume:0.3} );
-	gameState.pubsub.publish( "BackgroundLoop", {name:"MarketMusic", volume:1} );
-	gameState.pubsub.publish( "BackgroundLoop", {name:"MarketBackgroundSound", volume:0.4} );
+	if (window.muted){
+		// Mute sounds
+		gameState.pubsub.publish( "Play", {name:"Entrance", volume:0} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketMusic", volume:0} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketBackgroundSound", volume:0} );
+	}
+	else{
+		// Play soundz
+		gameState.pubsub.publish( "Play", {name:"Entrance", volume:0.3} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketMusic", volume:1} );
+		gameState.pubsub.publish( "BackgroundLoop", {name:"MarketBackgroundSound", volume:0.4} );
+	}
+
 
     stage.addChild(this.background);
 
@@ -342,6 +541,7 @@ function MarketScreen( stage, gameState ){
 
     this.uiElems = [];
     this.uiElems.push( new ImgButton( stage, gameState, 690,0, "res/items/ExitSign.png", "res/items/ExitGlow.png","SwitchScreen", "KitchenScreen", "Click"  ) );
+	
 
     var marketItemKeys = Object.keys(gameState.marketItems);
     for (var index in marketItemKeys ) {
@@ -379,6 +579,8 @@ function MarketScreen( stage, gameState ){
 	gameState.pubsub.subscribe("ShowPrice", this.showPrice );
     gameState.pubsub.subscribe("WalletAmount", this.setWalletAmount);
     gameState.pubsub.subscribe("ClearClipboard", this.clearClipboard);
+
+	new VolumeButton(stage, gameState, 730, 70, "ToggleMute", null, "Click", null)
 
     return {
 		blit : function(){
@@ -431,6 +633,7 @@ function ScoreScreen( stage, gameState ){
 	    "Pastured Turkey": 1.05,
 		"General Turkey": 1.00
     };
+
      // Optimal Temperature to be served at
 	this.scoreDistribution= function(inputTemp, layer) {
 		desiredAverage = 165;
@@ -453,20 +656,28 @@ function ScoreScreen( stage, gameState ){
 	totalScore += parseInt(coreTempScore.toFixed(0));
 
 	resultsDialogue = [];
+
+	var rating = ''
+
 	if (totalScore>=1800) {
 		randomDiag = perfect;
+		rating = ' (Perfect)';
 	}
 	else if (totalScore>=1400) {
 		randomDiag = great;
+		rating = ' (Great)';
 	}
 	else if (totalScore>=1000) {
 		randomDiag = average;
+		rating = ' (Average)';
 	}
 	else if (totalScore>=400) {
 		randomDiag = subPar;
+		rating = ' (Subpar)';
 	}
 	else {
 		randomDiag = terrible;
+		rating = ' (Terrible)';
 	}
 
 	for (var i = 0; i<=5; i++) {
@@ -481,6 +692,49 @@ function ScoreScreen( stage, gameState ){
 		return (stringResult)
 	}
 
+	function updateScores(score){
+
+		if (isNaN(score)){
+			return;
+		}
+
+		//High Score
+		if (!('highScore' in localStorage)){
+			localStorage.setItem("highScore", score);
+		}
+		else{
+			if(localStorage.getItem("highScore") < score){
+				localStorage.setItem("highScore", score);
+			}
+		}
+
+		//Past scores
+		if (!('pastScores' in localStorage)){
+			var scores = JSON.stringify([score]);
+			localStorage.setItem("pastScores", scores);
+		}
+		else{
+			
+			var pastScores = JSON.parse(localStorage.getItem("pastScores"));
+			
+			if(pastScores.length == 3){
+				pastScores.shift()
+			}
+			pastScores.push(score)
+
+			localStorage.setItem("pastScores", JSON.stringify(pastScores));
+			
+		}
+
+		//Calculate Average Score
+		var averageScore = 0;
+		var pastScores = JSON.parse(localStorage.getItem("pastScores"));
+		averageScore = pastScores.reduce((a, b) => a + b, 0)/pastScores.length
+		localStorage.setItem("averageScore", averageScore);
+
+		
+    }
+
 	gameState.pubsub.publish( "FadeOut", "" );
 
     this.background = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-1.png" );
@@ -490,6 +744,8 @@ function ScoreScreen( stage, gameState ){
     background1 = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-2.png" );
     background1.alpha = 0;
 	stage.addChild( background1 );
+	
+	new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null);
 
 	for (i in gameState.turkeyStates){
 		gameState.turkeyStates[i].scaleX = gameState.turkeyStates[i].scaleY = 1;
@@ -617,15 +873,55 @@ function ScoreScreen( stage, gameState ){
 
 		totalScore *= gameState.hardcoreModifier;
 
-		var totalText = new createjs.Text( totalScore.toFixed(0), "32px Arial", "black" );
+		updateScores(totalScore);
+
+		var totalText = new createjs.Text( totalScore.toFixed(0) + rating, "32px Arial", "black" );
 		totalText.x = 250;
 		totalText.y = 550;
 		stage.addChild( totalText );
+
+		//High Score Text
+		var highScore = localStorage.getItem('highScore') ?  localStorage.getItem('highScore') : '';
+		var highScoreText = new createjs.Text( isNaN(parseInt(highScore).toFixed(0)) ? '' : parseInt(highScore).toFixed(0), "20px Arial", "black" );
+		highScoreText.x = 600;
+		highScoreText.y = 400;
+		stage.addChild( highScoreText );
+
+		//Average Score Text
+		var averageScore = localStorage.getItem('averageScore') ?  localStorage.getItem('averageScore') : '';
+		var averageScoreText = new createjs.Text( isNaN(parseInt(averageScore).toFixed(0)) ? '' : parseInt(averageScore).toFixed(0), "20px Arial", "black" );
+		averageScoreText.x = highScoreText.x;
+		averageScoreText.y = highScoreText.y + 30;
+		stage.addChild( averageScoreText );
+
+		//Most Recent Score text
+		var pastScore1 = JSON.parse(localStorage.getItem('pastScores'))[2] ?  JSON.parse(localStorage.getItem('pastScores'))[2] : '';
+		var pastScoreText1 = new createjs.Text( isNaN(parseInt(pastScore1).toFixed(0)) ? '' : parseInt(pastScore1).toFixed(0), "20px Arial", "black" );
+		pastScoreText1.x = averageScoreText.x;
+		pastScoreText1.y = averageScoreText.y + 30;
+		stage.addChild( pastScoreText1 );
+
+		//Second Most Recent Score text
+		var pastScore2 = JSON.parse(localStorage.getItem('pastScores'))[1] ?  JSON.parse(localStorage.getItem('pastScores'))[1] : '';
+		var pastScoreText2 = new createjs.Text( isNaN(parseInt(pastScore2).toFixed(0)) ? '' : parseInt(pastScore2).toFixed(0), "20px Arial", "black" );
+		pastScoreText2.x = pastScoreText1.x;
+		pastScoreText2.y = pastScoreText1.y + 20;
+		stage.addChild( pastScoreText2 );
+
+		//Third Most Recent Score text
+		var pastScore3 = JSON.parse(localStorage.getItem('pastScores'))[0] ?  JSON.parse(localStorage.getItem('pastScores'))[0] : '';
+		var pastScoreText3 = new createjs.Text( isNaN(parseInt(pastScore3).toFixed(0)) ? '' : parseInt(pastScore3).toFixed(0), "20px Arial", "black" );
+		pastScoreText3.x = pastScoreText2.x;
+		pastScoreText3.y = pastScoreText2.y + 20;
+		stage.addChild( pastScoreText3 );
 
 		stage.addChild( stuffingTypeModifierText );
 		stage.addChild( turkeyTypeModifierText );
 		stage.addChild( frillsModifierText );
 		stage.addChild( hardcoreModifierText );
+
+
+
 	}} );
 
 
@@ -642,6 +938,7 @@ function CreditsScreen( stage, gameState ){
     stage.addChild( new Button( stage, gameState, 698, 533, 80, 50, "SwitchScreen", "MainScreen" ) );
 
     this.uiElems = [];
+	this.uiElems.push(new VolumeButton(stage, gameState, 730, 50, "ToggleMute", null, "Click", null));
     return {
 		blit : function(){
 
