@@ -892,7 +892,6 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, gre
 		this.name = name;
 		this.bought = false;
 		this.cost = cost;
-		this.grey = false;
 		this.deleted = false;
 
 		var mouseOverKitchen = new createjs.Bitmap( mouseOverKitchenImg );
@@ -905,12 +904,6 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, gre
 
 		mouseOver.x = mouseOut.x = greyedOut.x = x;
 		mouseOver.y = mouseOut.y = greyedOut.y = y;
-
-		if (gameState.turkeyBought == false && !weight) {
-			this.grey = true;
-		} else {
-			this.grey = false;
-		}
 
 	 	mouseOut.addEventListener( "mouseover", function(){
 	 		document.body.style.cursor='pointer';
@@ -1043,27 +1036,17 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, gre
 		getName: function(){return that.name;},
 		getCost: function(){return that.cost;},
 		setGrey: function(){
-			console.log(cost, gameState.wallet);
-			// if turkey hasn't been bought and item isn't a turkey
+			// grey out any items that aren't currently available to buy
 			if (((!gameState.turkeyBought && !weight) || (gameState.turkeyBought && weight) || (cost > gameState.wallet)) && !that.deleted) {
-				that.grey = true;
-			} else {
-				that.grey = false;
-			}
-
-			if (that.grey) {
-				console.log("grey", that.name);
 				greyedOut.visible = true;
 				mouseOut.visible = false;
 			} else {
-				console.log("not grey", that.name);
 				greyedOut.visible = false;
 				mouseOut.visible = true;
 			}
 		},
 		delete: function( stage ){
 			that.visible = false;
-			that.grey = false;
 			that.deleted = true;
 			gameState.pubsub.publish("RemoveItems", [mouseOut, mouseOver]);
 		},
@@ -1082,7 +1065,6 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, gre
 			}
 
 			if( !that.bought ){
-				console.log("drawing");
 				stage.addChild( greyedOut );
 				stage.addChild( mouseOut );
 				stage.addChild( mouseOver );

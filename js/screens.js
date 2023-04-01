@@ -541,12 +541,10 @@ function MarketScreen( stage, gameState ){
     }
 
 	gameState.pubsub.subscribe( "UpdateStoreItems", function(){
-		console.log("update store items");
+		// grey out any items that need to be greyed out after a purchase
 		for (var index in marketItemKeys ) {
 			gameState.marketItems[marketItemKeys[index]].setGrey();
-			// gameState.marketItems[marketItemKeys[index]].draw( stage );
 		}
-		stage.addChild(this.backgroundPrices);
 	})
 
 	stage.addChild(this.backgroundPrices); // place the prices on top of the items so that they appear to be in front
@@ -633,7 +631,7 @@ function ScoreScreen( stage, gameState ){
     // All the text for the entries
     var totalCookTime = gameState.turkeyCookCounter;
     var realTimeElapsed = Date.now() - gameState.startTime;
-    console.log("total cook time:"+ realTimeElapsed);
+    if (DEBUG) console.log("total cook time:"+ realTimeElapsed);
 
 	var turkeyState = gameState.ovenModel.getTurkeyState();
     var totalScore = 0;
