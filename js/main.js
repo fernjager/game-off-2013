@@ -163,6 +163,11 @@ function GameState(){
     queue.loadFile( {id: "res/screens/KitchenScreen/Cookbook-Open.png", src:"res/screens/KitchenScreen/Cookbook-Open.png"});
     queue.loadFile( {id: "res/screens/KitchenScreen/Explosion_AnimationLowRes.png", src:"res/screens/KitchenScreen/Explosion_AnimationLowRes.png"});
 
+	queue.loadFile( {id: "res/screens/KitchenScreen/Tutorial1.png", src:"res/screens/KitchenScreen/Tutorial1.png"});
+	queue.loadFile( {id: "res/screens/KitchenScreen/Tutorial2.png", src:"res/screens/KitchenScreen/Tutorial2.png"});
+	queue.loadFile( {id: "res/screens/KitchenScreen/Tutorial3Casual.png", src:"res/screens/KitchenScreen/Tutorial3Casual.png"});
+	queue.loadFile( {id: "res/screens/KitchenScreen/TutorialFinal.png", src:"res/screens/KitchenScreen/TutorialFinal.png"});
+
 
 	// Kitchen Sounds
 	queue.loadFile( {id: "res/sound/Kitchen/Oven_Door_Full_Open.mp3", src:"res/sound/Kitchen/Oven_Door_Full_Open.mp3"});
@@ -180,47 +185,63 @@ function GameState(){
 	queue.loadFile( {id: "res/items/Clipboard.png", src:"res/items/Clipboard.png"});
     queue.loadFile( {id: "res/items/Wallet.png", src:"res/items/Wallet.png"});
 
-    queue.loadFile( {id: "res/items/FrillsBox.png", src:"res/items/ExitSign.png"});
-    queue.loadFile( {id: "res/items/FrillsBoxGlow.png", src:"res/items/ExitGlow.png"});
+    queue.loadFile( {id: "res/items/ExitSign.png", src:"res/items/ExitSign.png"});
+    queue.loadFile( {id: "res/items/ExitGLow.png", src:"res/items/ExitGlow.png"});
 
-    queue.loadFile( {id: "res/items/FrillsBox.png", src:"res/items/FrillsBox.png"});
-    queue.loadFile( {id: "res/items/FrillsBoxGlow.png", src:"res/items/FrillsBoxGlow.png"});
+    queue.loadFile( {id: "res/items/FrillsBoxNew.png", src:"res/items/FrillsBox.png"});
+    queue.loadFile( {id: "res/items/FrillsBoxNewGlow.png", src:"res/items/FrillsBoxGlow.png"});
+	queue.loadFile( {id: "res/items/FrillsBoxNewGrey.png", src:"res/items/FrillsBoxGrey.png"});
 
-    queue.loadFile( {id: "res/items/TempProbe.png", src:"res/items/TempProbe.png"});
-    queue.loadFile( {id: "res/items/TempProbeGlow.png", src:"res/items/TempProbeGlow.png"});
+    queue.loadFile( {id: "res/items/TempProbeNew.png", src:"res/items/TempProbe.png"});
+    queue.loadFile( {id: "res/items/TempProbeNewGlow.png", src:"res/items/TempProbeGlow.png"});
+	queue.loadFile( {id: "res/items/TempProbeNewGrey.png", src:"res/items/TempProbeGrey.png"});
 
-	queue.loadFile( {id: "res/items/OvenLightBox.png", src:"res/items/OvenLightBox.png"});
-    queue.loadFile( {id: "res/items/OvenLightBoxGlow.png", src:"res/items/OvenLightBoxGlow.png"});
+	queue.loadFile( {id: "res/items/OvenLightBoxNew.png", src:"res/items/OvenLightBoxNew.png"});
+    queue.loadFile( {id: "res/items/OvenLightBoxNewGlow.png", src:"res/items/OvenLightBoxNewGlow.png"});
+	queue.loadFile( {id: "res/items/OvenLightBoxNewGrey.png", src:"res/items/OvenLightBoxNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Alarm.png", src:"res/items/Alarm.png"});
-    queue.loadFile( {id: "res/items/AlarmGlow.png", src:"res/items/AlarmGlow.png"});
+	queue.loadFile( {id: "res/items/AlarmNew.png", src:"res/items/AlarmNew.png"});
+    queue.loadFile( {id: "res/items/AlarmNewGlow.png", src:"res/items/AlarmNewGlow.png"});
+	queue.loadFile( {id: "res/items/AlarmNewGrey.png", src:"res/items/AlarmNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Cookbook1.png", src:"res/items/Cookbook1.png"});
-    queue.loadFile( {id: "res/items/Cookbook1Glow.png", src:"res/items/Cookbook1Glow.png"});
 
-	queue.loadFile( {id: "res/items/StuffingRepurposed.png", src:"res/items/StuffingRepurposed.png"});
-    queue.loadFile( {id: "res/items/StuffingRepurposedGlow.png", src:"res/items/StuffingRepurposedGlow.png"});
+	queue.loadFile( {id: "res/items/CookbookNew.png", src:"res/items/CookbookNew.png"});
+    queue.loadFile( {id: "res/items/CookbookNewGlow.png", src:"res/items/CookbookNewGlow.png"});
+	queue.loadFile( {id: "res/items/CookbookNewGrey.png", src:"res/items/CookbookNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/StuffingExquisite.png", src:"res/items/StuffingExquisite.png"});
-    queue.loadFile( {id: "res/items/StuffingExquisiteGlow.png", src:"res/items/StuffingExquisiteGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingRepurposedNew.png", src:"res/items/StuffingRepurposedNew.png"});
+    queue.loadFile( {id: "res/items/StuffingRepurposedNewGlow.png", src:"res/items/StuffingRepurposedNewGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingRepurposedNewGrey.png", src:"res/items/StuffingRepurposedNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/StuffingSpecial.png", src:"res/items/StuffingSpecial.png"});
-    queue.loadFile( {id: "res/items/StuffingSpecialGlow.png", src:"res/items/StuffingSpecialGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingExquisiteNew.png", src:"res/items/StuffingExquisiteNew.png"});
+    queue.loadFile( {id: "res/items/StuffingExquisiteNewGlow.png", src:"res/items/StuffingExquisiteNewGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingExquisiteNewGrey.png", src:"res/items/StuffingExquisiteNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Turkey5.png", src:"res/items/Turkey5.png"});
-    queue.loadFile( {id: "res/items/Turkey5Glow.png", src:"res/items/Turkey5Glow.png"});
+	queue.loadFile( {id: "res/items/StuffingSpecialNew.png", src:"res/items/StuffingSpecialNew.png"});
+    queue.loadFile( {id: "res/items/StuffingSpecialNewGlow.png", src:"res/items/StuffingSpecialNewGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingSpecialNewGrey.png", src:"res/items/StuffingSpecialNewGrey.png"});
 
-    queue.loadFile( {id: "res/items/Turkey4.png", src:"res/items/Turkey4.png"});
-    queue.loadFile( {id: "res/items/Turkey4Glow.png", src:"res/items/Turkey4Glow.png"});
 
-	queue.loadFile( {id: "res/items/Turkey3.png", src:"res/items/Turkey3.png"});
-    queue.loadFile( {id: "res/items/Turkey3Glow.png", src:"res/items/Turkey3Glow.png"});
+	queue.loadFile( {id: "res/items/Turkey5New.png", src:"res/items/Turkey5New.png"});
+    queue.loadFile( {id: "res/items/Turkey5NewGlow.png", src:"res/items/Turkey5NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey5NewGrey.png", src:"res/items/Turkey5NewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Turkey2.png", src:"res/items/Turkey2.png"});
-    queue.loadFile( {id: "res/items/Turkey2Glow.png", src:"res/items/Turkey2Glow.png"});
+    queue.loadFile( {id: "res/items/Turkey4New.png", src:"res/items/Turkey4New.png"});
+    queue.loadFile( {id: "res/items/Turkey4NewGlow.png", src:"res/items/Turkey4NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey4NewGrey.png", src:"res/items/Turkey4NewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Turkey1.png", src:"res/items/Turkey1.png"});
-    queue.loadFile( {id: "res/items/Turkey1Glow.png", src:"res/items/Turkey1Glow.png"});
+	queue.loadFile( {id: "res/items/Turkey3New.png", src:"res/items/Turkey3New.png"});
+    queue.loadFile( {id: "res/items/Turkey3NewGlow.png", src:"res/items/Turkey3NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey3NewGrey.png", src:"res/items/Turkey3NewGrey.png"});
+
+	queue.loadFile( {id: "res/items/Turkey2New.png", src:"res/items/Turkey2New.png"});
+    queue.loadFile( {id: "res/items/Turkey2NewGlow.png", src:"res/items/Turkey2NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey2NewGrey.png", src:"res/items/Turkey2NewGrey.png"});
+
+	queue.loadFile( {id: "res/items/Turkey1New.png", src:"res/items/Turkey1New.png"});
+    queue.loadFile( {id: "res/items/Turkey1NewGlow.png", src:"res/items/Turkey1NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey1NewGrey.png", src:"res/items/Turkey1NewGrey.png"});
+
 
     // People photos
    	queue.loadFile( {id: "res/people/Boyfriend.png", src:"res/people/Boyfriend.png"});
