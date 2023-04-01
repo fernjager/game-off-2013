@@ -893,10 +893,12 @@ return {
 }
 }
 
-function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mouseOutKitchenImg, mouseOverKitchenImg, funnyDescription, weight ){
+function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, greyedOutImg, mouseOutKitchenImg, mouseOverKitchenImg, funnyDescription, weight ){
 	var that = this;
 		this.name = name;
 		this.bought = false;
+		this.cost = cost;
+		this.deleted = false;
 
 		var mouseOverKitchen = new createjs.Bitmap( mouseOverKitchenImg );
 		var mouseOutKitchen = new createjs.Bitmap( mouseOutKitchenImg );
@@ -904,13 +906,16 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
 		var mouseOver = new createjs.Bitmap( mouseOverImg );
 		var mouseOut = new createjs.Bitmap( mouseOutImg );
 
-		mouseOver.x = mouseOut.x = x;
-		mouseOver.y = mouseOut.y = y;
+		var greyedOut = new createjs.Bitmap( greyedOutImg );
+
+		mouseOver.x = mouseOut.x = greyedOut.x = x;
+		mouseOver.y = mouseOut.y = greyedOut.y = y;
+
 	 	mouseOut.addEventListener( "mouseover", function(){
 	 		document.body.style.cursor='pointer';
 	 		mouseOver.visible = true;
 	 		mouseOut.visible = false;
-	 		gameState.pubsub.publish("ShowPrice", cost );
+	 		// gameState.pubsub.publish("ShowPrice", cost );
 	 		gameState.pubsub.publish("ShowDesc", {title:that.name, desc:funnyDescription, weight:weight} );
 	 	});
  		mouseOut.addEventListener( "mouseout", function(){
@@ -923,7 +928,7 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
  			document.body.style.cursor='pointer';
  			mouseOver.visible = true;
  			mouseOut.visible = false;
- 			gameState.pubsub.publish("ShowPrice", cost );
+ 			// gameState.pubsub.publish("ShowPrice", cost );
  			gameState.pubsub.publish("ShowDesc", {title:that.name, desc:funnyDescription, weight:weight} );
  		});
  		mouseOver.addEventListener( "mouseout", function(){
@@ -987,6 +992,8 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
 				    gameState.pubsub.publish("Play", {name:"Buy", volume:0.7} );
 				    gameState.pubsub.publish("WalletAmount", gameState.wallet - Math.abs(cost))
 				    gameState.pubsub.publish("StartTurkeyModel","");
+					gameState.pubsub.publish("UpdateStoreItems");
+
 	 			}
 	 			// can we buy this? Only possible if you already bought a turkey
 	 			else if( that.name.indexOf("Turkey") == -1 && gameState.turkeyBought == true ){
@@ -1004,9 +1011,11 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
 
 		 			gameState.purchasedItems.push( objReturn );
 		 			gameState.marketItems[ that.name ].delete();
+
 		 			that.bought = true;
 		 			gameState.pubsub.publish("Play", {name:"Buy", volume:0.7});
 		 			gameState.pubsub.publish("WalletAmount", gameState.wallet - Math.abs(cost));
+					gameState.pubsub.publish("UpdateStoreItems");
 		 		}
 		 		// One turkey only
 		 		else if( that.name.indexOf("Turkey") != -1 && gameState.turkeyBought == true ){
@@ -1023,20 +1032,34 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
  				gameState.pubsub.publish( "ShowDialog", {seq:"NoMoney", autoAdvance:true} );
 	 			gameState.pubsub.publish( "Play", "Error" );
 	 		}
+
  		});
+
  		mouseOver.visible = false;
 
  	var objReturn = {
 		tick: function(){},
 		getName: function(){return that.name;},
+		getCost: function(){return that.cost;},
+		setGrey: function(){
+			// grey out any items that aren't currently available to buy
+			if (((!gameState.turkeyBought && !weight) || (gameState.turkeyBought && weight) || (cost > gameState.wallet)) && !that.deleted) {
+				greyedOut.visible = true;
+				mouseOut.visible = false;
+			} else {
+				greyedOut.visible = false;
+				mouseOut.visible = true;
+			}
+		},
 		delete: function( stage ){
 			that.visible = false;
+			that.deleted = true;
 			gameState.pubsub.publish("RemoveItems", [mouseOut, mouseOver]);
 		},
 		draw: function( stage, newx, newy ){
 			if( newx && newy ){
-				mouseOut.x = mouseOver.x = newx;
-				mouseOut.y = mouseOver.y = newy;
+				mouseOut.x = mouseOver.x = greyedOut.x = newx;
+				mouseOut.y = mouseOver.y = greyedOut.y = newy;
 			}
 			if(DEBUG) console.log("NewScreen for item "+that.name +" is " +gameState.newScreen );
 			if( gameState.newScreen == "KitchenScreen" ){
@@ -1048,8 +1071,9 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
 			}
 
 			if( !that.bought ){
+				stage.addChild( greyedOut );
 				stage.addChild( mouseOut );
-	    		stage.addChild( mouseOver );
+				stage.addChild( mouseOver );
 	    	}
 		}
 	}

@@ -1,6 +1,6 @@
 // Robert- Here be dragons
 
-var DEBUG = 0;
+var DEBUG = 1;
 window.muted = false
 
 function GameState(){
@@ -164,6 +164,11 @@ function GameState(){
     queue.loadFile( {id: "res/screens/KitchenScreen/Cookbook-Open.png", src:"res/screens/KitchenScreen/Cookbook-Open.png"});
     queue.loadFile( {id: "res/screens/KitchenScreen/Explosion_AnimationLowRes.png", src:"res/screens/KitchenScreen/Explosion_AnimationLowRes.png"});
 
+	queue.loadFile( {id: "res/screens/KitchenScreen/Tutorial1.png", src:"res/screens/KitchenScreen/Tutorial1.png"});
+	queue.loadFile( {id: "res/screens/KitchenScreen/Tutorial2.png", src:"res/screens/KitchenScreen/Tutorial2.png"});
+	queue.loadFile( {id: "res/screens/KitchenScreen/Tutorial3Casual.png", src:"res/screens/KitchenScreen/Tutorial3Casual.png"});
+	queue.loadFile( {id: "res/screens/KitchenScreen/TutorialFinal.png", src:"res/screens/KitchenScreen/TutorialFinal.png"});
+
 
 	// Kitchen Sounds
 	queue.loadFile( {id: "res/sound/Kitchen/Oven_Door_Full_Open.mp3", src:"res/sound/Kitchen/Oven_Door_Full_Open.mp3"});
@@ -181,47 +186,63 @@ function GameState(){
 	queue.loadFile( {id: "res/items/Clipboard.png", src:"res/items/Clipboard.png"});
     queue.loadFile( {id: "res/items/Wallet.png", src:"res/items/Wallet.png"});
 
-    queue.loadFile( {id: "res/items/FrillsBox.png", src:"res/items/ExitSign.png"});
-    queue.loadFile( {id: "res/items/FrillsBoxGlow.png", src:"res/items/ExitGlow.png"});
+    queue.loadFile( {id: "res/items/ExitSign.png", src:"res/items/ExitSign.png"});
+    queue.loadFile( {id: "res/items/ExitGLow.png", src:"res/items/ExitGlow.png"});
 
-    queue.loadFile( {id: "res/items/FrillsBox.png", src:"res/items/FrillsBox.png"});
-    queue.loadFile( {id: "res/items/FrillsBoxGlow.png", src:"res/items/FrillsBoxGlow.png"});
+    queue.loadFile( {id: "res/items/FrillsBoxNew.png", src:"res/items/FrillsBox.png"});
+    queue.loadFile( {id: "res/items/FrillsBoxNewGlow.png", src:"res/items/FrillsBoxGlow.png"});
+	queue.loadFile( {id: "res/items/FrillsBoxNewGrey.png", src:"res/items/FrillsBoxGrey.png"});
 
-    queue.loadFile( {id: "res/items/TempProbe.png", src:"res/items/TempProbe.png"});
-    queue.loadFile( {id: "res/items/TempProbeGlow.png", src:"res/items/TempProbeGlow.png"});
+    queue.loadFile( {id: "res/items/TempProbeNew.png", src:"res/items/TempProbe.png"});
+    queue.loadFile( {id: "res/items/TempProbeNewGlow.png", src:"res/items/TempProbeGlow.png"});
+	queue.loadFile( {id: "res/items/TempProbeNewGrey.png", src:"res/items/TempProbeGrey.png"});
 
-	queue.loadFile( {id: "res/items/OvenLightBox.png", src:"res/items/OvenLightBox.png"});
-    queue.loadFile( {id: "res/items/OvenLightBoxGlow.png", src:"res/items/OvenLightBoxGlow.png"});
+	queue.loadFile( {id: "res/items/OvenLightBoxNew.png", src:"res/items/OvenLightBoxNew.png"});
+    queue.loadFile( {id: "res/items/OvenLightBoxNewGlow.png", src:"res/items/OvenLightBoxNewGlow.png"});
+	queue.loadFile( {id: "res/items/OvenLightBoxNewGrey.png", src:"res/items/OvenLightBoxNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Alarm.png", src:"res/items/Alarm.png"});
-    queue.loadFile( {id: "res/items/AlarmGlow.png", src:"res/items/AlarmGlow.png"});
+	queue.loadFile( {id: "res/items/AlarmNew.png", src:"res/items/AlarmNew.png"});
+    queue.loadFile( {id: "res/items/AlarmNewGlow.png", src:"res/items/AlarmNewGlow.png"});
+	queue.loadFile( {id: "res/items/AlarmNewGrey.png", src:"res/items/AlarmNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Cookbook1.png", src:"res/items/Cookbook1.png"});
-    queue.loadFile( {id: "res/items/Cookbook1Glow.png", src:"res/items/Cookbook1Glow.png"});
 
-	queue.loadFile( {id: "res/items/StuffingRepurposed.png", src:"res/items/StuffingRepurposed.png"});
-    queue.loadFile( {id: "res/items/StuffingRepurposedGlow.png", src:"res/items/StuffingRepurposedGlow.png"});
+	queue.loadFile( {id: "res/items/CookbookNew.png", src:"res/items/CookbookNew.png"});
+    queue.loadFile( {id: "res/items/CookbookNewGlow.png", src:"res/items/CookbookNewGlow.png"});
+	queue.loadFile( {id: "res/items/CookbookNewGrey.png", src:"res/items/CookbookNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/StuffingExquisite.png", src:"res/items/StuffingExquisite.png"});
-    queue.loadFile( {id: "res/items/StuffingExquisiteGlow.png", src:"res/items/StuffingExquisiteGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingRepurposedNew.png", src:"res/items/StuffingRepurposedNew.png"});
+    queue.loadFile( {id: "res/items/StuffingRepurposedNewGlow.png", src:"res/items/StuffingRepurposedNewGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingRepurposedNewGrey.png", src:"res/items/StuffingRepurposedNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/StuffingSpecial.png", src:"res/items/StuffingSpecial.png"});
-    queue.loadFile( {id: "res/items/StuffingSpecialGlow.png", src:"res/items/StuffingSpecialGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingExquisiteNew.png", src:"res/items/StuffingExquisiteNew.png"});
+    queue.loadFile( {id: "res/items/StuffingExquisiteNewGlow.png", src:"res/items/StuffingExquisiteNewGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingExquisiteNewGrey.png", src:"res/items/StuffingExquisiteNewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Turkey5.png", src:"res/items/Turkey5.png"});
-    queue.loadFile( {id: "res/items/Turkey5Glow.png", src:"res/items/Turkey5Glow.png"});
+	queue.loadFile( {id: "res/items/StuffingSpecialNew.png", src:"res/items/StuffingSpecialNew.png"});
+    queue.loadFile( {id: "res/items/StuffingSpecialNewGlow.png", src:"res/items/StuffingSpecialNewGlow.png"});
+	queue.loadFile( {id: "res/items/StuffingSpecialNewGrey.png", src:"res/items/StuffingSpecialNewGrey.png"});
 
-    queue.loadFile( {id: "res/items/Turkey4.png", src:"res/items/Turkey4.png"});
-    queue.loadFile( {id: "res/items/Turkey4Glow.png", src:"res/items/Turkey4Glow.png"});
 
-	queue.loadFile( {id: "res/items/Turkey3.png", src:"res/items/Turkey3.png"});
-    queue.loadFile( {id: "res/items/Turkey3Glow.png", src:"res/items/Turkey3Glow.png"});
+	queue.loadFile( {id: "res/items/Turkey5New.png", src:"res/items/Turkey5New.png"});
+    queue.loadFile( {id: "res/items/Turkey5NewGlow.png", src:"res/items/Turkey5NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey5NewGrey.png", src:"res/items/Turkey5NewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Turkey2.png", src:"res/items/Turkey2.png"});
-    queue.loadFile( {id: "res/items/Turkey2Glow.png", src:"res/items/Turkey2Glow.png"});
+    queue.loadFile( {id: "res/items/Turkey4New.png", src:"res/items/Turkey4New.png"});
+    queue.loadFile( {id: "res/items/Turkey4NewGlow.png", src:"res/items/Turkey4NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey4NewGrey.png", src:"res/items/Turkey4NewGrey.png"});
 
-	queue.loadFile( {id: "res/items/Turkey1.png", src:"res/items/Turkey1.png"});
-    queue.loadFile( {id: "res/items/Turkey1Glow.png", src:"res/items/Turkey1Glow.png"});
+	queue.loadFile( {id: "res/items/Turkey3New.png", src:"res/items/Turkey3New.png"});
+    queue.loadFile( {id: "res/items/Turkey3NewGlow.png", src:"res/items/Turkey3NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey3NewGrey.png", src:"res/items/Turkey3NewGrey.png"});
+
+	queue.loadFile( {id: "res/items/Turkey2New.png", src:"res/items/Turkey2New.png"});
+    queue.loadFile( {id: "res/items/Turkey2NewGlow.png", src:"res/items/Turkey2NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey2NewGrey.png", src:"res/items/Turkey2NewGrey.png"});
+
+	queue.loadFile( {id: "res/items/Turkey1New.png", src:"res/items/Turkey1New.png"});
+    queue.loadFile( {id: "res/items/Turkey1NewGlow.png", src:"res/items/Turkey1NewGlow.png"});
+	queue.loadFile( {id: "res/items/Turkey1NewGrey.png", src:"res/items/Turkey1NewGrey.png"});
+
 
     // People photos
    	queue.loadFile( {id: "res/people/Boyfriend.png", src:"res/people/Boyfriend.png"});
@@ -267,28 +288,31 @@ function GameState(){
     this.screenState = 0;
     this.newScreen = "";
 
+	const topShelf = 75;
+	const middleShelf = 250;
+	const bottomShelf = 450;
+
 	this.marketItems = {
-		"Frills Box" : new MarketItem( this, "Frills Box", 133,92, 3.00, "res/items/FrillsBox.png", "res/items/FrillsBoxGlow.png", "res/screens/KitchenScreen/FrillsBoxKitchen.png", "res/screens/KitchenScreen/FrillsBoxKitchenGlow.png",
-		 "Some people dress up their dogs. Others dress up their house. Why not dress up your turkey?" ),
+		"Organic Turkey" : new MarketItem( this, "Organic Turkey", 60,topShelf-10, randomWeight[0]*1.2, "res/items/Turkey5New.png", "res/items/Turkey5NewGlow.png", "res/items/Turkey5NewGrey.png",null,null, "All natural. No hormones. No antibiotics. Free Range. Lead Free", parseFloat(randomWeight[0]) ),
+	    "Free Range Turkey": new MarketItem( this, "Free Range Turkey", 215,topShelf+5, randomWeight[1]*1.00, "res/items/Turkey4New.png", "res/items/Turkey4NewGlow.png", "res/items/Turkey4NewGrey.png",null,null, "Our turkeys have wide open spaces to roam and are fed with only the highest quality feed.", parseFloat(randomWeight[1]) ),
+	    "Sunny Farms Turkey" : new MarketItem( this, "Sunny Farms Turkey", 315,topShelf-5, randomWeight[2]*0.60, "res/items/Turkey3New.png", "res/items/Turkey3NewGlow.png", "res/items/Turkey3NewGrey.png",null,null, "100% Turkey product from Sunny Farms Heavy Industries, Ltd.", parseFloat(randomWeight[2]) ),
+	    "Pastured Turkey": new MarketItem( this, "Pastured Turkey", 490,topShelf+5, randomWeight[3]*1.4, "res/items/Turkey2New.png", "res/items/Turkey2NewGlow.png", "res/items/Turkey2NewGrey.png",null,null, "Grassy fields and natural ingredients allow our turkeys to have a better life, and taste great.", parseFloat(randomWeight[3]) ),
+		"General Turkey": new MarketItem( this, "General Turkey", 600,topShelf, randomWeight[4]*0.80, "res/items/Turkey1New.png", "res/items/Turkey1NewGlow.png", "res/items/Turkey1NewGrey.png",null,null, "100% General Satisfaction Guaranteed", parseFloat(randomWeight[4]) ),
 
-
-	    "Temperature Probe" : new MarketItem( this, "Temperature Probe", 200, 57, 9.00, "res/items/TempProbe.png", "res/items/TempProbeGlow.png", "res/screens/KitchenScreen/TempProbeKitchen.png", "res/screens/KitchenScreen/TempProbeKitchenGlow.png", "Ensure your food is cooked with this handy thermometer. Now with easy to read LED display" ),
-	    "Oven Light in a Box" : new MarketItem( this, "Oven Light in a Box", 131,222, 15.00, "res/items/OvenLightBox.png", "res/items/OvenLightBoxGlow.png", null,null, "This will allow checking on your turkey without letting the heat out." ),
-
-	    "Alarm Clock" : new MarketItem( this, "Alarm Clock", 173,248, 6.00, "res/items/Alarm.png", "res/items/AlarmGlow.png", "res/screens/KitchenScreen/AlarmKitchen.png", "res/screens/KitchenScreen/AlarmKitchenGlow.png", "Have you ever wanted to control time? Now you can. Digital readout counts down until time of choice. Audible alarm" ),
-		"Cookbook" : new MarketItem( this, "Cookbook", 283,203, 3.00, "res/items/Cookbook1.png", "res/items/Cookbook1Glow.png","res/screens/KitchenScreen/CookbookKitchen.png",  "res/screens/KitchenScreen/CookbookKitchenGlow.png", "How do I cook turkey? Handy note space included for writing down temperature measurements" ),
-	    "Repurposed Stuffing" : new MarketItem( this, "Repurposed Stuffing",  510,197, 2.00, "res/items/StuffingRepurposed.png", "res/items/StuffingRepurposedGlow.png", "res/screens/KitchenScreen/StuffingRepurposedKitchen.png", "res/screens/KitchenScreen/StuffingRepurposedKitchenGlow.png","At least 80% original breadcrumb. Guaranteed to contain no avian products" ),
-	    "Exquisite Stuffing" : new MarketItem( this, "Exquisite Stuffing", 458,210, 3.00, "res/items/StuffingExquisite.png", "res/items/StuffingExquisiteGlow.png", "res/screens/KitchenScreen/StuffingExquisiteKitchen.png","res/screens/KitchenScreen/StuffingExquisiteKitchenGlow.png", "Colonial merchants once traveled the four reaches of the Earth to bring back the ingredients contained in this very box" ),
-
-	    "Special Stuffing" : new MarketItem( this, "Special Stuffing", 390,220, 6.00, "res/items/StuffingSpecial.png", "res/items/StuffingSpecialGlow.png",
+		"Frills Box" : new MarketItem( this, "Frills Box", 100,middleShelf+20, 3.00, "res/items/FrillsBoxNew.png", "res/items/FrillsBoxNewGlow.png", "res/items/FrillsBoxNewGrey.png", "res/screens/KitchenScreen/FrillsBoxKitchen.png", "res/screens/KitchenScreen/FrillsBoxKitchenGlow.png", 
+		"Some people dress up their dogs. Others dress up their house. Why not dress up your turkey?" ),
+		"Repurposed Stuffing" : new MarketItem( this, "Repurposed Stuffing",  260,middleShelf-5, 2.00, "res/items/StuffingRepurposedNew.png", "res/items/StuffingRepurposedNewGlow.png", "res/items/StuffingRepurposedNewGrey.png", "res/screens/KitchenScreen/StuffingRepurposedKitchen.png", "res/screens/KitchenScreen/StuffingRepurposedKitchenGlow.png","At least 80% original breadcrumb. Guaranteed to contain no avian products" ),
+	    "Exquisite Stuffing" : new MarketItem( this, "Exquisite Stuffing", 435,middleShelf+5, 3.00, "res/items/StuffingExquisiteNew.png", "res/items/StuffingExquisiteNewGlow.png", "res/items/StuffingExquisiteNewGrey.png", "res/screens/KitchenScreen/StuffingExquisiteKitchen.png","res/screens/KitchenScreen/StuffingExquisiteKitchenGlow.png", "Colonial merchants once traveled the four reaches of the Earth to bring back the ingredients contained in this very box" ),
+	    "Special Stuffing" : new MarketItem( this, "Special Stuffing", 610,middleShelf-5, 6.00, "res/items/StuffingSpecialNew.png", "res/items/StuffingSpecialNewGlow.png", "res/items/StuffingSpecialNewGrey.png",
 	    	"res/screens/KitchenScreen/StuffingSpecialKitchen.png","res/screens/KitchenScreen/StuffingSpecialKitchenGlow.png",
 	    	"Once rated as the most handsome man in the universe. Scott and his patented special stuffing will set you on the path to food heaven" ),
 
-	    "Organic Turkey" : new MarketItem( this, "Organic Turkey", 180,360, randomWeight[0]*1.2, "res/items/Turkey5.png", "res/items/Turkey5Glow.png",null,null, "All natural. No hormones. No antibiotics. Free Range. Lead Free", parseFloat(randomWeight[0]) ),
-	    "Free Range Turkey": new MarketItem( this, "Free Range Turkey", 540,320, randomWeight[1]*1.00, "res/items/Turkey4.png", "res/items/Turkey4Glow.png",null,null, "Our turkeys have wide open spaces to roam and are fed with only the highest quality feed.", parseFloat(randomWeight[1]) ),
-	    "Sunny Farms Turkey" : new MarketItem( this, "Sunny Farms Turkey", 265,415, randomWeight[2]*0.60, "res/items/Turkey3.png", "res/items/Turkey3Glow.png",null,null, "100% Turkey product from Sunny Farms Heavy Industries, Ltd.", parseFloat(randomWeight[2]) ),
-	    "Pastured Turkey": new MarketItem( this, "Pastured Turkey", 474,357, randomWeight[3]*1.4, "res/items/Turkey2.png", "res/items/Turkey2Glow.png",null,null, "Grassy fields and natural ingredients allow our turkeys to have a better life, and taste great.", parseFloat(randomWeight[3]) ),
-		"General Turkey": new MarketItem( this, "General Turkey", 378,426, randomWeight[4]*0.80, "res/items/Turkey1.png", "res/items/Turkey1Glow.png",null,null, "100% General Satisfaction Guaranteed", parseFloat(randomWeight[4]) )
+		
+		"Temperature Probe" : new MarketItem( this, "Temperature Probe", 150, bottomShelf+10, 9.00, "res/items/TempProbeNew.png", "res/items/TempProbeNewGlow.png", "res/items/TempProbeNewGrey.png", "res/screens/KitchenScreen/TempProbeKitchen.png", "res/screens/KitchenScreen/TempProbeKitchenGlow.png", "Ensure your food is cooked with this handy thermometer. Now with easy to read LED display" ),
+		"Oven Light in a Box" : new MarketItem( this, "Oven Light in a Box", 270,bottomShelf+15, 15.00, "res/items/OvenLightBoxNew.png", "res/items/OvenLightBoxNewGlow.png", "res/items/OvenLightBoxNewGrey.png", null,null, "This will allow checking on your turkey without letting the heat out." ),
+		"Alarm Clock" : new MarketItem( this, "Alarm Clock", 390,bottomShelf+30, 6.00, "res/items/AlarmNew.png", "res/items/AlarmNewGlow.png", "res/items/AlarmNewGrey.png", "res/screens/KitchenScreen/AlarmKitchen.png", "res/screens/KitchenScreen/AlarmKitchenGlow.png", "Have you ever wanted to control time? Now you can. Digital readout counts down until time of choice. Audible alarm" ),
+		"Cookbook" : new MarketItem( this, "Cookbook", 550,bottomShelf-10, 3.00, "res/items/CookbookNew.png", "res/items/CookbookNewGlow.png", "res/items/CookbookNewGrey.png", "res/screens/KitchenScreen/CookbookKitchen.png",  "res/screens/KitchenScreen/CookbookKitchenGlow.png", "How do I cook turkey? Handy note space included for writing down temperature measurements" ),
+		
 	};
 
         // Important Model, dummy placeholder
