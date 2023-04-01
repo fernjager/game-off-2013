@@ -350,10 +350,15 @@ function CookbookUI( stage, gameState ){
 				var logLine = new createjs.Text( "OFF", "12px Arial", "black" );
 
 				logLine.x = 423;
-				logLine.y = 50 * i+ 165;
+				logLine.y = 50 * i+ 155;
 				logLine.textBaseline = "alphabetic";
-				logLine.text = record.getType() + "   " + ("00"+time.getHours()).slice(-2) + ":" + ("00"+time.getMinutes()).slice(-2) + "        " + record.getContent();
-
+				logLine.text = record.getType() + "   " + 
+					("00"+time.getHours()).slice(-2) + ":" + 
+					("00"+time.getMinutes()).slice(-2) + "        " + 
+					record.getContent() + 
+					" ".repeat(40-(record.getContent().split('\n')[1].substring(29).length)) + 
+					record.getTemp().toString();
+					console.log(record.getContent().split('\n')[1].substring(29))
 				logEntries.push(logLine);
 				stage.addChild(logLine);
 			}
@@ -463,6 +468,7 @@ function OvenUI( stage, gameState ){
 				 }
 
 				 temperatureText.text = temp;
+				 gameState.ovenTemp = temp;
 
 			}
 
@@ -571,7 +577,7 @@ function OvenUI( stage, gameState ){
 			if(!evalSkin[turkeyState["skin"]["cond"][2]])
 				gameState.pubsub.publish("Death","");
 			gameState.pubsub.publish( "ShowDialog", {seq:"custom", autoAdvance:true, customText:evalSkin[turkeyState["skin"]["cond"][2]] + "." } );
-			gameState.pubsub.publish( "AddRecord", {type:"Open ", text:"The turkey looked " + turkeyState["skin"]["cond"][2]} );
+			gameState.pubsub.publish( "AddRecord", {type:"Open ", text:"The turkey looked\n " + " ".repeat(29) + turkeyState["skin"]["cond"][2], temp: gameState.ovenTemp} );
 			gameState.ovenModel.setRawTemp( (gameState.ovenModel.getRawTemp() - 3 ) < 20 ? 20 : gameState.ovenModel.getRawTemp() - 3 );
 			gameState.ovenOpened++;
 		}
@@ -595,7 +601,7 @@ function OvenUI( stage, gameState ){
 				if(!evalSkin[turkeyState["skin"]["cond"][2]])
 					gameState.pubsub.publish("Death","");
 				gameState.pubsub.publish( "ShowDialog", {seq:"custom", autoAdvance:true, customText:evalSkin[turkeyState["skin"]["cond"][2]] } );
-				gameState.pubsub.publish( "AddRecord", {type:"Peek ", text:"The turkey looked " +turkeyState["skin"]["cond"][2]} );
+				gameState.pubsub.publish( "AddRecord", {type:"Peek ", text:"The turkey looked\n" + " ".repeat(29) + turkeyState["skin"]["cond"][2], temp: gameState.ovenTemp} );
 			}
 	}
 	
@@ -607,7 +613,7 @@ function OvenUI( stage, gameState ){
 		else{
 			state = gameState.ovenModel.getTurkeyState();
 			gameState.pubsub.publish( "ShowDialog", {seq:"custom", autoAdvance:true, customText:"The core temperature of the turkey reads " + UtilityFunctions.C2F(state.core.temp).toFixed(2) + " F" } );
-			gameState.pubsub.publish( "AddRecord", {type:"Probe", text:"Core temperature measured: " + UtilityFunctions.C2F(state.core.temp).toFixed(2) + " F"} );
+			gameState.pubsub.publish( "AddRecord", {type:"Probe", text:"Core temperature \n" + " ".repeat(29) + "measured: " + UtilityFunctions.C2F(state.core.temp).toFixed(2) + " F", temp: gameState.ovenTemp} );
 		}
 	}
 
@@ -975,7 +981,7 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
 				    that.bought = true;
 
 				    // record time started
-    				gameState.pubsub.publish( "AddRecord", {type:"Note ", text:"Turkey bought and placed in oven"} );
+    				gameState.pubsub.publish( "AddRecord", {type:"Note ", text:"Turkey bought and\n" + " ".repeat(29) + "placed in oven", temp: gameState.ovenTemp} );
 
 
 				    gameState.pubsub.publish("Play", {name:"Buy", volume:0.7} );

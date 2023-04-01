@@ -12,6 +12,7 @@ function GameState(){
     this.startTime =  Date.now();//new Date().getTime()
 	this.oldTime =  Date.now();// new Date().getTime();
     this.oldDialogueTime =  Date.now();//new Date().getTime();
+	this.ovenTemp = 0;
 
     this.gameStarted = false;
 	this.name = "";
@@ -309,7 +310,7 @@ function GameState(){
 	this.kitchenIntro = false;
 
     this.addRecord = function( record ){
-        that.peekRecords.push( new Record( record.type, that.currentTime, record.text ) );
+        that.peekRecords.push( new Record( record.type, that.currentTime, record.text, record.temp) );
     }
     that.pubsub.subscribe( "AddRecord", this.addRecord );
 
@@ -432,7 +433,7 @@ function GameUI( canvasElem, gameState ){
 
 }
 
-function Record( type, dateTime, record ){
+function Record( type, dateTime, record, temp){
     return {
         getTime: function(){
             return dateTime;
@@ -442,7 +443,10 @@ function Record( type, dateTime, record ){
         },
         getType: function(){
             return type;
-        }
+        },
+		getTemp: function(){
+			return temp ? temp: '0' + "\u00B0F";
+		}
     }
 }
 
