@@ -482,10 +482,11 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 function MarketScreen( stage, gameState ){
 	var that = this;
 
-    this.background = new createjs.Bitmap( "res/screens/MarketScreen/MarketScreenShelvesPrices.png" );
-    var price = new createjs.Text( "", "16px Arial", "black" );
-    	price.x = 120;
-	 	price.y = 560;
+    this.background = new createjs.Bitmap( "res/screens/MarketScreen/MarketShelves.png" );
+    this.backgroundPrices = new createjs.Bitmap( "res/screens/MarketScreen/MarketShelvesPrices.png" );
+	// var price = new createjs.Text( "", "16px Arial", "black" );
+    // 	price.x = 120;
+	//  	price.y = 560;
 
 	var wallet = new createjs.Text( "$" + parseFloat(gameState.wallet).toFixed(2), "20px Arial", "black" );
    		wallet.x = 725;
@@ -496,21 +497,21 @@ function MarketScreen( stage, gameState ){
 		walletTag.y = 550;
 
 	var clipboardImg = new createjs.Bitmap("res/items/ClipboardSmaller.png");
-		clipboardImg.x = 5;
+		clipboardImg.x = 0;
 		clipboardImg.y = 415;
 
 	var clipboardTitle = new createjs.Text( "Shopping List", "14px Arial", "black" );
-   		clipboardTitle.x = 25;
+   		clipboardTitle.x = 20;
 	 	clipboardTitle.y = 470;
 	 	clipboardTitle.lineWidth = 110;
 
 	var clipboardText = new createjs.Text( "Turkey", "12px Arial", "black" );
-   		clipboardText.x = 23;
+   		clipboardText.x = 18;
 	 	clipboardText.y = 500;
 	 	clipboardText.lineWidth = 102;
 
 	var clipboardWeight = new createjs.Text( "", "12px Arial", "black" );
-   		clipboardWeight.x = 75;
+   		clipboardWeight.x = 70;
 	 	clipboardWeight.y = 580;
 	 	clipboardWeight.lineWidth = 110;
 
@@ -530,7 +531,51 @@ function MarketScreen( stage, gameState ){
 
     stage.addChild(this.background);
 
-    stage.addChild(wallet);
+    this.uiElems = [];
+    this.uiElems.push( new ImgButton( stage, gameState, 690,0, "res/items/ExitSign.png", "res/items/ExitGlow.png","SwitchScreen", "KitchenScreen", "Click"  ) );
+	
+    var marketItemKeys = Object.keys(gameState.marketItems);
+    for (var index in marketItemKeys ) {
+		gameState.marketItems[marketItemKeys[index]].setGrey();
+    	gameState.marketItems[marketItemKeys[index]].draw( stage );
+    }
+
+	gameState.pubsub.subscribe( "UpdateStoreItems", function(){
+		console.log("update store items");
+		for (var index in marketItemKeys ) {
+			gameState.marketItems[marketItemKeys[index]].setGrey();
+			// gameState.marketItems[marketItemKeys[index]].draw( stage );
+		}
+		stage.addChild(this.backgroundPrices);
+	})
+
+	stage.addChild(this.backgroundPrices); // place the prices on top of the items so that they appear to be in front
+	
+	// place the text display the prices on top of the price tags
+	var priceX = 107;
+	var priceY = 180;
+	incrementX = 135;
+    for (var index in marketItemKeys ) {
+		var priceString = "$ " + ( gameState.marketItems[marketItemKeys[index]].getCost() == NaN ? "" : parseFloat(gameState.marketItems[marketItemKeys[index]].getCost()).toFixed(2) );
+		var price = new createjs.Text( priceString, "15px Arial", "black" );
+    	price.x = priceX;
+	 	price.y = priceY;
+		priceX += incrementX;
+		if (index == 4) {
+			priceY += 190;
+			priceX = 150;
+			incrementX = 160;
+		}
+		if (index == 8) {
+			priceY += 190;
+			priceX = 155;
+			incrementX = 137;
+		}
+		stage.addChild(price);
+    }
+
+	// place the wallet and the clipboard on top of the prices
+	stage.addChild(wallet);
     stage.addChild(walletTag);
     stage.addChild(clipboardImg);
 
@@ -539,25 +584,12 @@ function MarketScreen( stage, gameState ){
     stage.addChild(clipboardWeight);
     //stage.addChild(price);
 
-    this.uiElems = [];
-    this.uiElems.push( new ImgButton( stage, gameState, 690,0, "res/items/ExitSign.png", "res/items/ExitGlow.png","SwitchScreen", "KitchenScreen", "Click"  ) );
-	
 
-    var marketItemKeys = Object.keys(gameState.marketItems);
-    for (var index in marketItemKeys ) {
-    	gameState.marketItems[marketItemKeys[index]].draw( stage );
-    }
-
-	// this.topground = new createjs.Bitmap( "res/screens/MarketScreen/MarketTopShelf.png" );
-	// stage.addChild( this.topground );
-
-
-	this.showPrice = function( cost ){
-		price.text = "$ " + ( cost == NaN ? "" : parseFloat(cost).toFixed(2) );
-	}
+	// this.showPrice = function( cost ){
+	// 	price.text = "$ " + ( cost == NaN ? "" : parseFloat(cost).toFixed(2) );
+	// }
 
 	this.clearClipboard = function(){
-		price.text = "";
 		clipboardTitle.text = "";
 		clipboardText.text = "";
 		clipboardWeight.text = "";
@@ -576,7 +608,7 @@ function MarketScreen( stage, gameState ){
     }
 
     gameState.pubsub.subscribe("ShowDesc", this.showDesc);
-	gameState.pubsub.subscribe("ShowPrice", this.showPrice );
+	// gameState.pubsub.subscribe("ShowPrice", this.showPrice );
     gameState.pubsub.subscribe("WalletAmount", this.setWalletAmount);
     gameState.pubsub.subscribe("ClearClipboard", this.clearClipboard);
 
