@@ -189,13 +189,13 @@ function GameState(){
     queue.loadFile( {id: "res/items/ExitSign.png", src:"res/items/ExitSign.png"});
     queue.loadFile( {id: "res/items/ExitGLow.png", src:"res/items/ExitGlow.png"});
 
-    queue.loadFile( {id: "res/items/FrillsBoxNew.png", src:"res/items/FrillsBox.png"});
-    queue.loadFile( {id: "res/items/FrillsBoxNewGlow.png", src:"res/items/FrillsBoxGlow.png"});
-	queue.loadFile( {id: "res/items/FrillsBoxNewGrey.png", src:"res/items/FrillsBoxGrey.png"});
+    queue.loadFile( {id: "res/items/FrillsBoxNew.png", src:"res/items/FrillsBoxNew.png"});
+    queue.loadFile( {id: "res/items/FrillsBoxNewGlow.png", src:"res/items/FrillsBoxNewGlow.png"});
+	queue.loadFile( {id: "res/items/FrillsBoxNewGrey.png", src:"res/items/FrillsBoxNewGrey.png"});
 
-    queue.loadFile( {id: "res/items/TempProbeNew.png", src:"res/items/TempProbe.png"});
-    queue.loadFile( {id: "res/items/TempProbeNewGlow.png", src:"res/items/TempProbeGlow.png"});
-	queue.loadFile( {id: "res/items/TempProbeNewGrey.png", src:"res/items/TempProbeGrey.png"});
+    queue.loadFile( {id: "res/items/TempProbeNew.png", src:"res/items/TempProbeNew.png"});
+    queue.loadFile( {id: "res/items/TempProbeNewGlow.png", src:"res/items/TempProbeNewGlow.png"});
+	queue.loadFile( {id: "res/items/TempProbeNewGrey.png", src:"res/items/TempProbeNewGrey.png"});
 
 	queue.loadFile( {id: "res/items/OvenLightBoxNew.png", src:"res/items/OvenLightBoxNew.png"});
     queue.loadFile( {id: "res/items/OvenLightBoxNewGlow.png", src:"res/items/OvenLightBoxNewGlow.png"});

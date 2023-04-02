@@ -384,7 +384,15 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 	var tutToDisplay;
 	var tutorialText;
 	var nextText;
+	var skipText = new createjs.Text("Skip", "15px Arial", "#222222");
+	var skipButton;
 	var tutorialDone = false;
+
+	gameState.pubsub.subscribe( "SkipTutorial", function(){
+		tutorialDone = true;
+		NextTutorial();
+	})
+
 	if (tutorialNum == 1) {
 		tutToDisplay = "res/screens/KitchenScreen/Tutorial1.png";
 		
@@ -398,6 +406,11 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 		nextText.x = 455;
 		nextText.y = 220;
 
+		skipText.x = 135;
+		skipText.y = 225;
+		skipButton = new Button( stage, gameState, 135, 225, 50, 50, "SkipTutorial", null )
+
+
 	} else if (tutorialNum == 2) {
 		tutToDisplay = "res/screens/KitchenScreen/Tutorial2.png"
 
@@ -410,6 +423,11 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 		nextText = new createjs.Text("Next >", "20px Arial", "black");
 		nextText.x = 575;
 		nextText.y = 390;
+
+		skipText.x = 255;
+		skipText.y = 390;
+		skipButton = new Button( stage, gameState, 255, 390, 50, 50, "SkipTutorial", null )
+
 
 	} else if (tutorialNum == 3) {
 		if (gameState.hard == true) {
@@ -425,6 +443,7 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 			nextText = new createjs.Text("Finish", "20px Arial", "black");
 			nextText.x = 590;
 			nextText.y = 375;
+
 		} else {
 			tutToDisplay = "res/screens/KitchenScreen/Tutorial3Casual.png"
 
@@ -437,6 +456,10 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
 			nextText = new createjs.Text("Next >", "20px Arial", "black");
 			nextText.x = 660;
 			nextText.y = 195;
+
+			skipText.x = 340;
+			skipText.y = 195;
+			skipButton = new Button( stage, gameState, 340, 195, 50, 50, "SkipTutorial", null )
 
 		}
 	} else if (tutorialNum == 4) {
@@ -464,12 +487,16 @@ function DisplayTutorial( stage, gameState, tutorialNum ){
     stage.addChild( tutorial );
 	stage.addChild( tutorialText );
 	stage.addChild( nextText );
+	stage.addChild( skipText );
+	stage.addChild( skipButton );
 
 
 	function NextTutorial(){ 
 		stage.removeChild(tutorial);
 		stage.removeChild(tutorialText);
 		stage.removeChild(nextText);
+		stage.removeChild(skipText);
+		stage.removeChild(skipButton);
 		if (tutorialDone) {
 			// Once the tutorial is done, bring up dialogue that tells the user to go buy a turkey
 			gameState.pubsub.publish( "ShowDialog", {seq:"KitchenInitial", autoAdvance:false} ) 
