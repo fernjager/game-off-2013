@@ -531,7 +531,7 @@ function OvenUI( stage, gameState ){
 		if( event.stageY > 300 && that.ovenDoor != OVEN_OPEN){
 			ovenOpen();
 			//Mouse Drag to open fully from peek or closed.
-		} else if (that.ovenDoor == OVEN_PEEK && (Date.now() - that.ovenDoorTimer < 2000)) {
+		} else if (that.ovenDoor == OVEN_PEEK && (Date.now() - that.ovenDoorTimer < 800)) {
 			//Peek to Open if double clicked within seconds. Meant for Mobile users who cannot drag
 			ovenOpen();
 		}else if( that.ovenDoor == OVEN_CLOSED && that.ovenDoor != OVEN_OPEN ){
