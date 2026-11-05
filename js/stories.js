@@ -141,7 +141,7 @@ var story = {
 "Dad: We don't know yet, but management did send an internal memo around re-affirming the boundaries of privacy.",
 "Dad: This whole thing was completely overblown though. Rob was just looking at a screensaver. He didn't even try and hide it either.",
 "Dad: But that's life. People who get excited over nothing.",
-"Wife: Well, he did seem kind of creepy asking for the customer's advice on the E-mail.",
+"Spouse: Well, he did seem kind of creepy asking for the customer's advice on the E-mail.",
 "Brother: And what about Julia? She seemed to know a littttle bit too much about the goings on in her office cubicle.",
 "Dad: Maybe she has an office camera or something. I'm not sure.",
 "Brother: Do you have one?",

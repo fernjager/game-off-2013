@@ -23,8 +23,10 @@ function LoadingScreen( stage, gameState ){
 	stage.addChild( textContent);
 
 	gameState.pubsub.subscribe( "Load", function(percent){
+		// LoadQueue progress can overshoot 1.0; keep the UI within its range.
+		percent = Math.max(0, Math.min(4, percent));
 		textContent.text = (percent * 25).toFixed(2) + " %";
-		var wholeNum = Math.floor(percent);
+		var wholeNum = Math.min(4, Math.floor(percent));
 		if( that.lastPercent != percent){
 			that.lastPercent = percent;
 			stage.addChild( that.turkeyState[wholeNum] );
@@ -33,7 +35,7 @@ function LoadingScreen( stage, gameState ){
 
 		//If we're still on image one, don't fade it out, it's the base image!
 		if(  wholeNum != 0 )
-			that.turkeyState[wholeNum].alpha = percent.toFixed(2) - wholeNum;
+			that.turkeyState[wholeNum].alpha = Math.max(0, Math.min(1, percent - wholeNum));
 
 		// Done!
 		if(  wholeNum == 4 ){
@@ -427,7 +429,7 @@ function MarketScreen( stage, gameState ){
 
 
 	this.showPrice = function( cost ){
-		price.text = "$ " + ( cost == NaN ? "" : parseFloat(cost).toFixed(2) );
+		price.text = "$ " + ( isNaN(cost) ? "" : parseFloat(cost).toFixed(2) );
 	}
 
 	this.clearClipboard = function(){
@@ -485,7 +487,8 @@ function ScoreScreen( stage, gameState ){
     	"cooked": 500,
     	"overcooked": 200,
     	"dry": -300,
-    	"burnt": -500
+    	"burnt": -500,
+    	"fire": -1000
     };
 
     var coreScoreChart  = {
@@ -495,7 +498,8 @@ function ScoreScreen( stage, gameState ){
     	"cooked": 1000,
     	"overcooked": 750,
     	"dry": 400,
-    	"burnt": 0
+    	"burnt": 0,
+    	"fire": -1000
     };
 
     var typeToMod = {
@@ -507,10 +511,10 @@ function ScoreScreen( stage, gameState ){
     };
      // Optimal Temperature to be served at
 	this.scoreDistribution= function(inputTemp, layer) {
-		desiredAverage = 165;
+		var desiredAverage = 165;
  		if(layer=="skin") desiredAverage = 260;
 
-		variance = 1000; //Std Deviation 31.62
+		var variance = 1000; //Std Deviation 31.62
  		return(Math.exp(-(Math.pow((inputTemp-desiredAverage),2)/(2*variance))))
 	};
 
@@ -521,12 +525,15 @@ function ScoreScreen( stage, gameState ){
 	var outerTempScore = that.scoreDistribution( outerTemp, "skin" ) * 200;
 	var coreTempScore = that.scoreDistribution( coreTemp ) * 200;
 
-	totalScore += parseInt(skinScoreChart[ turkeyState.skin.cond[2]]);
-	totalScore += parseInt(coreScoreChart[ turkeyState.core.cond[2]]);
+	var skinConditionScore = skinScoreChart[ turkeyState.skin.cond[2]];
+	var coreConditionScore = coreScoreChart[ turkeyState.core.cond[2]];
+	totalScore += isNaN(skinConditionScore) ? 0 : skinConditionScore;
+	totalScore += isNaN(coreConditionScore) ? 0 : coreConditionScore;
 	totalScore += parseInt(outerTempScore.toFixed(0));
 	totalScore += parseInt(coreTempScore.toFixed(0));
 
-	resultsDialogue = [];
+	var resultsDialogue = [];
+	var randomDiag;
 	if (totalScore>=1800) {
 		randomDiag = perfect;
 	}
@@ -543,12 +550,16 @@ function ScoreScreen( stage, gameState ){
 		randomDiag = terrible;
 	}
 
+	// Work from a copy so replaying or revisiting the score screen does not
+	// permanently consume the story result arrays.
+	var resultPool = randomDiag.slice(0);
 	for (var i = 0; i<=5; i++) {
-		resultsDialogue.push(randomString(randomDiag));
+		resultsDialogue.push(randomString(resultPool));
 	}
 	messages["end"] = resultsDialogue;
 
 	function randomString(stringArray) {
+		if( stringArray.length == 0 ) return "";
 		var index = UtilityFunctions.randRange(0, stringArray.length-1);
 		var stringResult = stringArray[index];
 		stringArray.splice(index,1);
@@ -561,11 +572,11 @@ function ScoreScreen( stage, gameState ){
     this.background.alpha = 1;
     stage.addChild( this.background );
 
-    background1 = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-2.png" );
+    var background1 = new createjs.Bitmap( "res/screens/ScoreScreen/Score-Evaluation-2.png" );
     background1.alpha = 0;
 	stage.addChild( background1 );
 
-	for (i in gameState.turkeyStates){
+	for (var i in gameState.turkeyStates){
 		gameState.turkeyStates[i].scaleX = gameState.turkeyStates[i].scaleY = 1;
 		gameState.turkeyStates[i].x = 490;
 		gameState.turkeyStates[i].y = 110;
@@ -666,7 +677,7 @@ function ScoreScreen( stage, gameState ){
 		stage.addChild( outerTemperatureDesc );
 
 		// Modifiers
-		var turkeyMod = typeToMod[gameState.turkeyType];
+		var turkeyMod = typeToMod[gameState.turkeyType] || 1;
 		var turkeyTypeModifierText = new createjs.Text( -1*((1-turkeyMod)*100).toFixed(0) + "%", "20px Arial", "black" );
 		turkeyTypeModifierText.x = 310;
 		turkeyTypeModifierText.y = 437;
