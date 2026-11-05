@@ -4,7 +4,10 @@ function DialogueSequence( sequence ){
 
 	return {
 		next: function(){
-			return targetStory.shift().split(": ");
+			var line = targetStory.shift();
+			// Missing/empty sequences used to crash on ''.split; return an empty
+			// line instead so the UI can safely close.
+			return(line ? line.split(": ") : ["Me", ""]);
 		},
 		more: function(){
 			return targetStory.length > 0;
@@ -71,10 +74,20 @@ function DialogUI( stage, gameState ){
 
 	this.endFunc = function(){};
 
+	var getPlayerImage = function(){
+		return peopleImg[gameState.playerGender || gameState.gender || "Male"];
+	};
+
+	var formatDialogue = function( text ){
+		var pronoun = gameState.playerPronoun || gameState.pronoun || "he";
+		return text.replace(/\[GenderPronoun\]/g, pronoun ).replace(/\[Player\]/g, gameState.name || "Sam" );
+	};
+
  	this.showDialog= function( textSeq ){
  		if(DEBUG) console.log("showing"+ textSeq);
  		if( !peopleImg["Me"] ){
- 		   	 peopleImg["Me"] = peopleImg[gameState.playerGender];
+ 		   	 var playerImage = getPlayerImage();
+ 		   	 if( playerImage ) peopleImg["Me"] = playerImage;
  		}
 
 		if( !peopleImg["Spouse"] ){
@@ -98,10 +111,12 @@ function DialogUI( stage, gameState ){
  		oldTime = new Date().getTime();
  		that.currDialogueSeq = new DialogueSequence( textSeq.seq );
  		var nextDialogue = that.currDialogueSeq.next();
+ 		if( !nextDialogue || typeof nextDialogue[1] != "string" )
+ 			nextDialogue = ["Me", ""];
 
  		that.endFunc = textSeq.endFunc || function(){};
 
- 		that.textContent.text=nextDialogue[1].replace(/\[GenderPronoun\]/g, gameState.pronoun ).replace(/\[Player\]/g, gameState.name || "Sam" );
+ 		that.textContent.text=formatDialogue(nextDialogue[1]);
 
  		that.currentFace.y = 250;
  		that.currentFace = peopleImg[nextDialogue[0]] || that.currentFace;
@@ -110,17 +125,19 @@ function DialogUI( stage, gameState ){
  	}
 
  	this.showRandomConvo = function(){
+ 		dialogueList = Object.keys(story);
  		// No more stories, thanks for playing
  		if( dialogueList.length == 0 ) return;
 
- 		dialogueList = Object.keys(story);
- 		var randomKey = UtilityFunctions.randRange(0, dialogueList.length);
+ 		var randomKey = UtilityFunctions.randRange(0, dialogueList.length - 1);
+ 		var storyName = dialogueList[ randomKey ];
+ 		if( !storyName ) return;
 
  		// check if there is something going on
  		if( !that.currDialogueSeq.more() ){
  			if(DEBUG) console.log("random story");
- 			this.showDialog( {seq: dialogueList[ randomKey ] || "Dad Tells a bad Joke", autoAdvance:true } );
- 			delete story[ dialogueList[ randomKey ] ];
+ 			that.showDialog( {seq: storyName, autoAdvance:true } );
+ 			delete story[ storyName ];
  			gameState.dialogueHeard++;
  		}
  	}
@@ -130,15 +147,18 @@ function DialogUI( stage, gameState ){
  	var clickEvent = function( timer ){
 
  		if( !peopleImg["Me"] ){
- 		   	 peopleImg["Me"] = peopleImg[gameState.gender];
+ 		   	 var playerImage = getPlayerImage();
+ 		   	 if( playerImage ) peopleImg["Me"] = playerImage;
  		}
 
  		// if there is more dialogue text, then keep going, otherwise, recede
  		if( that.currDialogueSeq.more() ){
  			var nextDialogue = that.currDialogueSeq.next();
+ 			if( !nextDialogue || typeof nextDialogue[1] != "string" )
+ 				nextDialogue = ["Me", ""];
 
  			that.dialogMotionQueue.push(DIALOG_SHOWING);
- 			that.textContent.text=nextDialogue[1].replace(/\[GenderPronoun\]/g, gameState.pronoun ).replace(/\[Player\]/g, gameState.name || "Sam" );
+ 			that.textContent.text=formatDialogue(nextDialogue[1]);
  			if(DEBUG) console.log("showing face:" +nextDialogue[0] );
 
  			// swap out face immediately
@@ -146,11 +166,13 @@ function DialogUI( stage, gameState ){
  			that.currentFace = peopleImg[nextDialogue[0]] || that.currentFace;
  			that.currentFace.y = 0;
  		}else{
- 			// pause and close dialog
+ 			// pause and close dialog; only invoke endFunc once
+ 			var endFunc = that.endFunc;
+ 			that.endFunc = function(){};
  			setTimeout( function(){
  				that.dialogMotionQueue.push(DIALOG_RECEDING);
- 				if( that.endFunc )
- 					that.endFunc();
+ 				if( endFunc )
+ 					endFunc();
  			}, 250 );
  		}
  			delayCounter = 0;

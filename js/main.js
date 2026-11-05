@@ -15,8 +15,10 @@ function GameState(){
     this.gameStarted = false;
 	this.name = "";
 	this.gender = "Male";
+	this.playerGender = "Male";
 	this.partnerGender = "Male";
     this.pronoun = "he";
+	this.playerPronoun = "he";
 	this.partnerPronoun = "he";
 	this.wallet = 45.00;
 	this.hard = false;
@@ -371,6 +373,10 @@ function GameUI( canvasElem, gameState ){
 
 	// delay for fade in and fade-out
 	this.switchScreen = function( screenName ){
+		// The difficulty screen installs global keyboard handlers; remove them
+		// as soon as we leave that screen so typing no longer edits the hidden name.
+		document.onkeyup = null;
+		document.onkeydown = null;
 		gameState.screenState = SCREEN_OUT;
 		dialogManager.minDialog();
 		if(DEBUG) console.log("Switch screen called with" + screenName);

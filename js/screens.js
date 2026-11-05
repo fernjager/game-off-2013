@@ -158,22 +158,33 @@ function DifficultyScreen( stage, gameState ){
  	this.femalePlayerSelection.alpha = 0;
  	stage.addChild( this.femalePlayerSelection );
 
-	this.malePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerMale.png" );
+ 	this.malePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerMale.png" );
  	stage.addChild( this.malePartnerSelection );
 
  	this.femalePartnerSelection = new createjs.Bitmap( "res/screens/DifficultyScreen/ButtonPartnerFemale.png" );
  	this.femalePartnerSelection.alpha = 0;
  	stage.addChild( this.femalePartnerSelection );
 
+	// Restore the previously selected genders when returning to this screen.
+	if( gameState.playerGender == "Female" ){
+		this.malePlayerSelection.alpha = 0;
+		this.femalePlayerSelection.alpha = 1;
+	}
+	if( gameState.partnerGender == "Female" ){
+		this.malePartnerSelection.alpha = 0;
+		this.femalePartnerSelection.alpha = 1;
+	}
+
 	// Difficulty
 	this.casualMode = new createjs.Bitmap( "res/screens/DifficultyScreen/DifficultyCasual.png" );
+	if( gameState.hard ) this.casualMode.alpha = 0;
  	stage.addChild( this.casualMode );
 
  	this.hardcoreMode = new createjs.Bitmap( "res/screens/DifficultyScreen/DifficultyHardcore.png" );
- 	this.hardcoreMode.alpha = 0;
+ 	this.hardcoreMode.alpha = gameState.hard ? 1 : 0;
  	stage.addChild( this.hardcoreMode );
 
- 	var nameInput = new createjs.Text( "", "48px Arial", "black" );
+ 	var nameInput = new createjs.Text( gameState.name || "", "48px Arial", "black" );
    		nameInput.x = 47;
 	 	nameInput.y = 85;
 	 	nameInput.lineWidth = 175;
@@ -216,7 +227,9 @@ function DifficultyScreen( stage, gameState ){
             	nameInput.text = nameInput.text.substr(0, nameInput.text.length-1);
             	gameState.name = nameInput.text;
             }
-        event.preventDefault();
+            // Only suppress the browser's default backspace navigation.
+            if( keynum == 8 )
+                event.preventDefault();
     }
 
  	// Player and partner gender
@@ -250,6 +263,9 @@ function DifficultyScreen( stage, gameState ){
  			that.femalePlayerSelection.alpha = 1;
  			gameState.playerPronoun = "she";
  		}
+ 		// dialogue.js uses these fields too; keep all player-gender state in sync.
+ 		gameState.gender = gender;
+ 		gameState.pronoun = gameState.playerPronoun;
  	})
 	 gameState.pubsub.subscribe( "ChangePartnerGender", function(gender){
 		gameState.partnerGender=gender;
