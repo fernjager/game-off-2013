@@ -29,7 +29,7 @@ You have been invited to craft the centerpiece of the American thanksgiving dinn
 ## Authors
 
 * [Scott R. Mobley](http://www.linkedin.com/in/mobleyscott) - Turkey Overlord and Master of Dialogue
-* [Robert J. Chen](http://fernjager.net) - Javascript Wizard
+* [Robert J. Chen](https://www.linkedin.com/in/robertjessechen/) - Javascript Wizard
 * [Benjamin Kwok](mailto:tengen1112@gmail.com) - Unpaid Art Peasant
 * Sheen Kao -  Finite Elementalist Supreme
 
