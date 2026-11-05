@@ -15,8 +15,10 @@ function GameState(){
     this.gameStarted = false;
 	this.name = "";
 	this.gender = "Male";
+	this.playerGender = "Male";
 	this.partnerGender = "Male";
     this.pronoun = "he";
+	this.playerPronoun = "he";
 	this.partnerPronoun = "he";
 	this.wallet = 45.00;
 	this.hard = false;
@@ -93,8 +95,8 @@ function GameState(){
     queue.loadFile( {id: "HelpP9P10", src:"res/screens/HelpCreditsScreen/HelpP9P10.png" } );
 
 
-    queue.loadFile( {id: "ScoreScreenFile", src:"res/screens/ScoreScreen/Score-Evaluation-1.png" } );
-    queue.loadFile( {id: "ScoreScreenFile", src:"res/screens/ScoreScreen/Score-Evaluation-2.png" } );
+    queue.loadFile( {id: "ScoreEvaluation1File", src:"res/screens/ScoreScreen/Score-Evaluation-1.png" } );
+    queue.loadFile( {id: "ScoreEvaluation2File", src:"res/screens/ScoreScreen/Score-Evaluation-2.png" } );
 
     queue.loadFile( {id: "MarketScreenfile", src:"res/screens/MarketScreen/MarketScreen.png"} );
 
@@ -170,8 +172,8 @@ function GameState(){
 	queue.loadFile( {id: "res/items/Clipboard.png", src:"res/items/Clipboard.png"});
     queue.loadFile( {id: "res/items/Wallet.png", src:"res/items/Wallet.png"});
 
-    queue.loadFile( {id: "res/items/FrillsBox.png", src:"res/items/ExitSign.png"});
-    queue.loadFile( {id: "res/items/FrillsBoxGlow.png", src:"res/items/ExitGlow.png"});
+    queue.loadFile( {id: "ExitSignFile", src:"res/items/ExitSign.png"});
+    queue.loadFile( {id: "ExitGlowFile", src:"res/items/ExitGlow.png"});
 
     queue.loadFile( {id: "res/items/FrillsBox.png", src:"res/items/FrillsBox.png"});
     queue.loadFile( {id: "res/items/FrillsBoxGlow.png", src:"res/items/FrillsBoxGlow.png"});
@@ -306,19 +308,25 @@ function GameState(){
 
     function addHighScore(name, turkeyPoundage, cookTime, score){
     	var scores = {};
-    	var now = new Date();
-    	if( !localStorage.getItem("highScores") ){
-    		scores = JSON.parse( localStorage.getItem("highScores") );
+    	var storedScores = localStorage.getItem("highScores");
+    	if( storedScores ){
+    		try {
+    			scores = JSON.parse( storedScores ) || {};
+    		} catch( error ) {
+    			scores = {};
+    		}
     	}
 
-    	scores[now.getYear()+"/"+now.getMonth()+"/"+now.getDay()] = {
+    	var now = new Date();
+    	var dateKey = now.getFullYear()+"/"+(now.getMonth()+1)+"/"+now.getDate();
+    	scores[dateKey] = {
     			"name" : name,
     			"weight" : turkeyPoundage,
     			"cookTime" : cookTime,
     			"score" : score
     	};
 
-    	localStorage.setItem("highScores", JSON.stringfy(scores));
+    	localStorage.setItem("highScores", JSON.stringify(scores));
     }
 
 	function gameLoop(){
@@ -341,7 +349,7 @@ function GameUI( canvasElem, gameState ){
 	this.stage = new createjs.Stage( canvasElem );
 	this.stage.enableMouseOver(25);
 	
-	this.activeScreenName = "EndingScreen";
+	this.activeScreenName = "LoadingScreen";
 	this.activeScreenObj = {};
 
 	/* Initialize All Screens */
@@ -363,7 +371,7 @@ function GameUI( canvasElem, gameState ){
 	textContent.y = 30;
 	//this.stage.addChild( textContent);
 	var overlay = new createjs.Shape();
- 	overlay.graphics.beginFill("#fffffff").drawRect(0, 0, 800, 600 );
+ 	overlay.graphics.beginFill("#ffffff").drawRect(0, 0, 800, 600 );
  	overlay.alpha = 0;
 	this.stage.addChild(overlay);
 
@@ -371,6 +379,10 @@ function GameUI( canvasElem, gameState ){
 
 	// delay for fade in and fade-out
 	this.switchScreen = function( screenName ){
+		// The difficulty screen installs global keyboard handlers; remove them
+		// as soon as we leave that screen so typing no longer edits the hidden name.
+		document.onkeyup = null;
+		document.onkeydown = null;
 		gameState.screenState = SCREEN_OUT;
 		dialogManager.minDialog();
 		if(DEBUG) console.log("Switch screen called with" + screenName);
