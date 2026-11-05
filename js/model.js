@@ -24,6 +24,12 @@ function TurkeyLayer( name, layerNumber1, turkeyModel, ovenModel ){
 		},
 		getHighestTemp: function(){
 			return that.highestTemp;
+		},
+		resetLayerTemps: function(){
+			that.waterLost = 0;
+			that.finalTemperature = 20;
+			that.cookCondition = "Raw";
+			that.highestTemp = 0;
 		}
 
     }
@@ -66,6 +72,9 @@ function TurkeyModel( weight, ovenModel ){
 	};
 	
 	this.resetLayerTemps = function() {
+		this.globTemp = [];
+		this.pointRadius = [];
+		this.initializePoints();
 		for (var i in this.totalLayers ) {
 		    this.totalLayers[i].resetLayerTemps();
 	    }
@@ -225,7 +234,7 @@ UtilityFunctions = {
 					parenthesis.push(dTdr[k]*Math.pow(pointRadius[k],2))
 				}
 				
-				dPdr = []
+				var dPdr = []
 				for (var k=0; k<splitsNum; k++){
 				if (k==0) {
 					dPdr.push((parenthesis[1] - parenthesis[0])/deltar) }
