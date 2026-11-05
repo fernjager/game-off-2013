@@ -94,6 +94,8 @@ function HelpUI( stage, gameState ){
 	// Show core temperature
 	this.showHelp = function(){
 		if( that.showingHelp ) return;
+		position = 100;
+		helpImg = helpPages[0];
 		gameState.pubsub.publish("Play", "Open_Cookbook");
 
 		for( var i in helpPages ){
@@ -102,7 +104,6 @@ function HelpUI( stage, gameState ){
 		}
 
 		helpPages[0].visible = true;
-		stage.addChild( that.background );
 		stage.addChild( closeButton );
 		stage.addChild( nextButton );
 		stage.addChild( prevButton );
@@ -338,6 +339,7 @@ function CookbookUI( stage, gameState ){
 		if( !that.showingCookbook ){
 			// TODO: So this object is actually persistent: we should not remove/add children, just hide stuff visually
 			logEntries = [];
+			hiddenEntries = [];
 			stage.addChild( cookbookImg );
 			stage.addChild( closeButton );
 
@@ -893,6 +895,8 @@ return {
 
 		if( dayNight.x < -15583 )
 			dayNight.x = 0;
+		if( mood.x < -15583 )
+			mood.x = 0;
 
 	}
 }
@@ -947,7 +951,7 @@ function MarketItem( gameState, name, x, y, cost, mouseOutImg, mouseOverImg, mou
  		mouseOutKitchen.addEventListener( "mouseout", function(){
  			document.body.style.cursor='default';
  			mouseOverKitchen.visible = false;
- 			mouseOverKitchen.visible = true;
+ 			mouseOutKitchen.visible = true;
  		} );
  		mouseOverKitchen.addEventListener( "mouseover", function(){
  			document.body.style.cursor='pointer';

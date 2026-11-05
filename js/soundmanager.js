@@ -14,6 +14,7 @@ function SoundManager( gameState ){
 	// Register all sounds loaded in gameState
 	createjs.Sound.registerSound("res/sound/turkey_in_the_straw.mp3", "TitleMusic");
 	createjs.Sound.registerSound("res/sound/Store/Waterford.mp3", "MarketMusic");
+	createjs.Sound.registerSound("res/sound/Store/supermarket.mp3", "MarketBackgroundSound");
 	createjs.Sound.registerSound("res/sound/GUI/click.mp3", "Click");
 	createjs.Sound.registerSound("res/sound/GUI/buzz.mp3", "Error");
 	createjs.Sound.registerSound("res/sound/Store/buy.mp3", "Buy");
